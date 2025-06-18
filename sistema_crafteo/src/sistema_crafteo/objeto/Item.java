@@ -14,6 +14,8 @@ public abstract class Item {
 
 	public abstract int getTiempoCrafteo();
 
+	public abstract int getTiempoCrafteo(int cantidadUnidades);
+
 	public boolean esCrafteable() {
 		return false; // Por defecto NO es crafteable
 	}
@@ -21,4 +23,13 @@ public abstract class Item {
 	public String getArbolCrafteo() {
 		return this.nombre; // Por defecto se retorna a si mismo unicamente
 	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
 }

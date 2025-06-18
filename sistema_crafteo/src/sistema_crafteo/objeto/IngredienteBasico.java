@@ -1,19 +1,19 @@
 package sistema_crafteo.objeto;
 
 public class IngredienteBasico extends Item {
-	int tiempoCrafteo;
 
-	public IngredienteBasico(String nombre, String descripcion, int tiempoCrafteo) {
+	public IngredienteBasico(String nombre, String descripcion) {
 		super(nombre, descripcion);
-		if (tiempoCrafteo < 0) {
-			throw new IllegalArgumentException("Tiempo de crafteo menor a cero");
-		}
-
-		this.tiempoCrafteo = tiempoCrafteo;
 	}
 
 	@Override
 	public int getTiempoCrafteo() {
-		return tiempoCrafteo;
+		return 0;
 	}
+
+	@Override
+	public int getTiempoCrafteo(int cantidadUnidades) {
+		return 0;
+	}
+	
 }

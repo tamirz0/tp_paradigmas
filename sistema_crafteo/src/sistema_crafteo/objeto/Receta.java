@@ -4,19 +4,14 @@ import java.util.Map;
 
 public class Receta {
 	Map<Item, Integer> ingredientes;
-	int cantidadProducida;
 	MesaDeTrabajo mesaRequerida;
 
-	public Receta(Map<Item, Integer> ingredientes, int cantidadProducida, MesaDeTrabajo mesaRequerida) {
+	public Receta(Map<Item, Integer> ingredientes, MesaDeTrabajo mesaRequerida) {
 		if (ingredientes == null) {
 			throw new IllegalArgumentException("Lista de ingredientes nula en creacion receta");
 		}
-		if (cantidadProducida <= 0) {
-			throw new IllegalArgumentException("Cantidad producida menor o igual a cero");
-		}
 
 		this.ingredientes = ingredientes;
-		this.cantidadProducida = cantidadProducida;
 		this.mesaRequerida = mesaRequerida;
 	}
 
@@ -26,5 +21,16 @@ public class Receta {
 	 * 
 	 * }
 	 */
+
+	public int getTiempoReceta() {
+		int tiempo = 0;
+		for (Map.Entry<Item, Integer> entrada : ingredientes.entrySet()) {
+			Item key = entrada.getKey();
+			Integer valor = entrada.getValue();
+			tiempo += key.getTiempoCrafteo(valor);
+		}
+		tiempo += mesaRequerida.recetaCreacion.getTiempoReceta();
+		return tiempo;
+	}
 
 }
