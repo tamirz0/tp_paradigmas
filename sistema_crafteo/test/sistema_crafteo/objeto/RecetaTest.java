@@ -4,11 +4,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class ItemTest {
-	
+class RecetaTest {
+
 	@Test
-	void setUp() {
-		assertTrue(true);
+	void test() {
+		fail("Not yet implemented");
 	}
 
 }
