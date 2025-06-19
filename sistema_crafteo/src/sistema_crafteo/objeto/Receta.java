@@ -1,5 +1,6 @@
 package sistema_crafteo.objeto;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Receta {
@@ -10,14 +11,20 @@ public class Receta {
 		if (ingredientes == null) {
 			throw new IllegalArgumentException("Parametro nulo");
 		}
-		if(ingredientes.isEmpty()) {
+		if (ingredientes.isEmpty()) {
 			throw new IllegalArgumentException("Sin ingredientes");
 		}
 
 		this.ingredientes = ingredientes;
 		this.mesaRequerida = mesaRequerida;
 	}
-
+	
+	public Receta() {
+		ingredientes = new HashMap<Item, Integer>();
+		mesaRequerida = null;
+	}
+	
+	
 	/*
 	 * Util para cuando implementemos JSON public Receta(int cantidadProducida,
 	 * MesaDeTrabajo mesaRequerida, Map<String, Integer> ingredientes) {
@@ -30,9 +37,13 @@ public class Receta {
 		for (Map.Entry<Item, Integer> entrada : ingredientes.entrySet()) {
 			Item key = entrada.getKey();
 			Integer valor = entrada.getValue();
-			tiempo += key.getTiempoCrafteo(valor);
+			tiempo += key.getTiempoCrafteoTotal() * valor;
 		}
-		tiempo += mesaRequerida.getRecetaCreacion().getTiempoReceta();
+
+		if (mesaRequerida != null) {
+			tiempo += mesaRequerida.getRecetaCreacion().getTiempoReceta();
+		}
+
 		return tiempo;
 	}
 

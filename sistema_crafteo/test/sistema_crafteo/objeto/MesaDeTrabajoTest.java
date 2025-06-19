@@ -24,9 +24,10 @@ class MesaDeTrabajoTest {
 		}
 
 		@Override
-		public int getTiempoCrafteo(int cantidadUnidades) {
+		public int getTiempoCrafteoTotal() {
 			return 0;
 		}
+
 		
 	}
 	
@@ -52,7 +53,7 @@ class MesaDeTrabajoTest {
 	}
 	
 	@Test
-	void crear_parametrosVacios_lanzaExcepcion() {
+	void crearMesa_parametrosVacios_lanzaExcepcion() {
 		Exception e1 = assertThrows(IllegalArgumentException.class, () -> {
 			mesa = new MesaDeTrabajo(null, receta);
 		});
@@ -64,6 +65,42 @@ class MesaDeTrabajoTest {
 		String esperado = "Parametros nulos";
 		assertEquals(esperado, e1.getMessage());
 		assertEquals(esperado, e2.getMessage());
+	}
+	
+	@Test
+	void crearMesa_recetaConIngredientesCrafteables_lanzaExcepcion() {
+		class ItemCrafteable extends Item{
+			public ItemCrafteable() {
+				super("Crafteable", "-");
+			}
+
+			@Override
+			public int getTiempoCrafteo() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+			@Override
+			public int getTiempoCrafteoTotal() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+			@Override
+			public boolean esCrafteable() {
+				return true;
+			}
+		}
+		ItemCrafteable crafteable = new ItemCrafteable();
+		Map<Item, Integer> ingredientes = new HashMap<>();
+		ingredientes.put(crafteable, 100);
+		Receta recetaConCrafteable = new Receta(ingredientes, null);
+		
+		Exception e = assertThrows(IllegalArgumentException.class, () -> {
+			mesa = new MesaDeTrabajo("mesa", recetaConCrafteable);
+		});
+		
+		assertEquals("Mesa de trabajo solo puede ser creada con ingredientes basicos", e.getMessage());
 	}
 	
 	

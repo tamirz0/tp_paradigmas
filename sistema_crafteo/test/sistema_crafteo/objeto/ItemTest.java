@@ -20,10 +20,10 @@ class ItemTest {
 		}
 
 		@Override
-		public int getTiempoCrafteo(int cantidadUnidades) {
-			// TODO Auto-generated method stub
+		public int getTiempoCrafteoTotal() {
 			return 1;
 		}
+
 
 	}
 
@@ -60,9 +60,9 @@ class ItemTest {
 	}
 	
 	@Test
-	void getTiempoCrafteo_conParametros_retornaValorCorrecto() {
+	void getTiempoCrafteoTotal_itemValido_retornaValorCorrecto() {
 		int esperado = 1;
-		int actual = item.getTiempoCrafteo(100);
+		int actual = item.getTiempoCrafteoTotal();
 		assertEquals(esperado, actual);
 	}
 	

@@ -12,8 +12,9 @@ public class IngredienteBasico extends Item {
 	}
 
 	@Override
-	public int getTiempoCrafteo(int cantidadUnidades) {
+	public int getTiempoCrafteoTotal() {
 		return 0;
 	}
+
 	
 }

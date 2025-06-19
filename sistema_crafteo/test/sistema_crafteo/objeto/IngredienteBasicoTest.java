@@ -20,10 +20,5 @@ class IngredienteBasicoTest {
 		assertEquals(0, actual);
 	}
 	
-	@Test
-	void getTiempoCrafteo_conParametro_esCero() {
-		int actual = basico.getTiempoCrafteo(100);
-		assertEquals(0, actual);
-	}
 
 }

@@ -13,8 +13,8 @@ public abstract class Item {
 	}
 
 	public abstract int getTiempoCrafteo();
-
-	public abstract int getTiempoCrafteo(int cantidadUnidades);
+	public abstract int getTiempoCrafteoTotal();
+	
 
 	public boolean esCrafteable() {
 		return false; // Por defecto NO es crafteable

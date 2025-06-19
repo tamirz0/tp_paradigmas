@@ -31,8 +31,8 @@ class RecetaTest {
 			}
 
 			@Override
-			public int getTiempoCrafteo(int cantidadUnidades) {
-				return 1;
+			public int getTiempoCrafteoTotal() {
+				return 0;
 			}
 
 		}
