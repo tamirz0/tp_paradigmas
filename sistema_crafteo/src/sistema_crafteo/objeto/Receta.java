@@ -3,12 +3,15 @@ package sistema_crafteo.objeto;
 import java.util.Map;
 
 public class Receta {
-	Map<Item, Integer> ingredientes;
-	MesaDeTrabajo mesaRequerida;
+	private final Map<Item, Integer> ingredientes;
+	private MesaDeTrabajo mesaRequerida;
 
 	public Receta(Map<Item, Integer> ingredientes, MesaDeTrabajo mesaRequerida) {
 		if (ingredientes == null) {
-			throw new IllegalArgumentException("Lista de ingredientes nula en creacion receta");
+			throw new IllegalArgumentException("Parametro nulo");
+		}
+		if(ingredientes.isEmpty()) {
+			throw new IllegalArgumentException("Sin ingredientes");
 		}
 
 		this.ingredientes = ingredientes;
@@ -29,8 +32,16 @@ public class Receta {
 			Integer valor = entrada.getValue();
 			tiempo += key.getTiempoCrafteo(valor);
 		}
-		tiempo += mesaRequerida.recetaCreacion.getTiempoReceta();
+		tiempo += mesaRequerida.getRecetaCreacion().getTiempoReceta();
 		return tiempo;
+	}
+
+	public Map<Item, Integer> getIngredientes() {
+		return ingredientes;
+	}
+
+	public MesaDeTrabajo getMesaRequerida() {
+		return mesaRequerida;
 	}
 
 }
