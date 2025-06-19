@@ -5,16 +5,25 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ObjetoCrafteable extends Item {
-	List<Receta> recetas;
-	int tiempoCrafteo;
-	int cantidadProducida;
+	private final List<Receta> recetas;
+	private final int tiempoCrafteo;
+	private final int cantidadProducida;
 
-	public ObjetoCrafteable(String nombre, String descripcion, int tiempoCrafteo, Receta... recetas) {
+	public ObjetoCrafteable(String nombre, String descripcion, int tiempoCrafteo, int cantidadProducida,
+			Receta... recetas) {
 		super(nombre, descripcion);
+
+		if (cantidadProducida <= 0 || tiempoCrafteo <= 0) {
+			throw new IllegalArgumentException("Parametros negativos o cero");
+		}
+
 		this.recetas = new ArrayList<>();
 		for (Receta receta : recetas) {
 			this.recetas.add(receta);
 		}
+
+		this.cantidadProducida = cantidadProducida;
+		this.tiempoCrafteo = tiempoCrafteo;
 
 	}
 
@@ -30,11 +39,16 @@ public class ObjetoCrafteable extends Item {
 	}
 
 	public int getTiempoCrafteo(int cantidadUnidades) {
+		if (cantidadUnidades <= 0) {
+			return 0;
+		}
+
 		int cantidadCrafteos;
 		if (cantidadUnidades < cantidadProducida) {
-			cantidadCrafteos = 0;
+			cantidadCrafteos = 1;
 		} else {
-			cantidadCrafteos = cantidadUnidades / cantidadProducida;
+			int res = cantidadUnidades / cantidadProducida;
+			cantidadCrafteos = cantidadUnidades % cantidadProducida == 0 ? res : res + 1;
 		}
 		return cantidadCrafteos * tiempoCrafteo;
 	}
@@ -52,6 +66,14 @@ public class ObjetoCrafteable extends Item {
 	@Override
 	public String getArbolCrafteo() {
 		return "a";
+	}
+
+	public List<Receta> getRecetas() {
+		return recetas;
+	}
+
+	public int getCantidadProducida() {
+		return cantidadProducida;
 	}
 
 }

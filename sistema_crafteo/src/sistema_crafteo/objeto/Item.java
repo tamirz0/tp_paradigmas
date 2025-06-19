@@ -1,8 +1,8 @@
 package sistema_crafteo.objeto;
 
 public abstract class Item {
-	String nombre;
-	String descripcion;
+	private final String nombre;
+	private final String descripcion;
 
 	public Item(String nombre, String descripcion) {
 		if (nombre == null || descripcion == null) {
