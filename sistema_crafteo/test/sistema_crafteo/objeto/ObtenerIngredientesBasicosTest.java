@@ -10,8 +10,17 @@ import org.junit.jupiter.api.Test;
 
 public class ObtenerIngredientesBasicosTest {
 	
+	private static boolean sonBasicos(Map<Item, Integer> dic) {
+		for (Map.Entry<Item, Integer> entrada : dic.entrySet()) {
+			if(entrada.getKey().esCrafteable()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	@Test
-	void getIngredientesBasicos_objetoCrafteable_retornoCorrecto() {
+	void getIngredientesBasicos_nivel3_retornoCorrecto() {
 		//			A (15)
 		//			|	 |	
 		//	(x5)P(10) (2)C (0)
@@ -59,13 +68,57 @@ public class ObtenerIngredientesBasicosTest {
 
 		
 		assertEquals(2, actual.size());
-		
-		for (Map.Entry<Item, Integer> entrada: actual.entrySet()) {
-			assertTrue(!entrada.getKey().esCrafteable());
-		}
-		
+		assertTrue(sonBasicos(actual));
 		assertEquals(esperadoC,actual.get(c));
 		assertEquals(esperadoMc,actual.get(mc));
 		
 	}
+	
+	@Test
+	void getIngredientesBasicos_nivel3ConSumaDeCantidades_retornaCorrecto() {
+		int esperadoMadera = 6;
+		int esperadoMetal = 11;
+		int esperadoRoca = 9;
+		
+		IngredienteBasico madera = new IngredienteBasico("Madera", " ");
+		IngredienteBasico roca = new IngredienteBasico("Roca", " ");
+		IngredienteBasico metal = new IngredienteBasico("Metal", " ");
+		
+		Receta recetaEspada;
+		Receta recetaPalo;
+		Receta recetaPiedra;
+		
+		Map<Item, Integer> ingredientes = new HashMap<>();
+		
+		ingredientes.put(madera, 2);
+		
+		recetaPalo = new Receta(ingredientes, null, 3);
+		
+		ingredientes = new HashMap<Item, Integer>();
+		ingredientes.put(roca, 3);
+		ingredientes.put(metal, 3);
+		
+		recetaPiedra = new Receta(ingredientes, null, 2);
+		
+		ObjetoCrafteable palo = new ObjetoCrafteable("Palo", " ", 5, recetaPalo);
+		ObjetoCrafteable piedra = new ObjetoCrafteable("Piedra", " ", 10, recetaPiedra);
+		
+		ingredientes = new HashMap<Item, Integer>();
+		ingredientes.put(metal, 2);
+		ingredientes.put(piedra, 5);
+		ingredientes.put(palo, 9);
+		
+		recetaEspada = new Receta(ingredientes, null, 1);
+		
+		ObjetoCrafteable espada = new ObjetoCrafteable("Espada", " ", 10, recetaEspada);
+		
+		Map<Item, Integer> actual = espada.getIngredientesBasicos();
+		
+		assertTrue(sonBasicos(actual));
+		
+		assertEquals(esperadoMadera, actual.get(madera));
+		assertEquals(esperadoMetal, actual.get(metal));
+		assertEquals(esperadoRoca, actual.get(roca));
+	}
+	
 }

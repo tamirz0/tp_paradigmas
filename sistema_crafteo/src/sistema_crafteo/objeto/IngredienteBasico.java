@@ -1,8 +1,5 @@
 package sistema_crafteo.objeto;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class IngredienteBasico extends Item {
 
 	public IngredienteBasico(String nombre, String descripcion) {
@@ -24,18 +21,5 @@ public class IngredienteBasico extends Item {
 		return "Basico " + nombre;
 	}
 	
-	@Override
-	public Map<Item, Integer> getIngredientesBasicos(){
-		Map<Item, Integer> ingrediente = new HashMap<>();
-		ingrediente.put(this, 1);
-		return ingrediente;
-	}
-	
-	@Override
-	public Map<Item, Integer> getIngredientesBasicos(int cantidadPedida){
-		Map<Item, Integer> ingrediente = new HashMap<>();
-		ingrediente.put(this, cantidadPedida);
-		return ingrediente;
-	}
 	
 }

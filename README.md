@@ -17,7 +17,7 @@ Se busca representar recetas de crafteo, ingredientes básicos, objetos intermed
     - Estado: ***Implementado y testeado***
     - Descripcion: Dado un objeto crafteable, mostrar la lista de ingredientes y cantidades necesarias (sólo el primer nivel de la receta, sin descomponer los ingredientes).
 2. ¿Qué necesito para craftear un objeto desde cero?
-    - Estado: ***Pendiente***
+    - Estado: ***Implementado y testeado***
     - Descripcion: Dado un objeto crafteable, mostrar todos los elementos básicos necesarios, con sus cantidades totales, considerando la descomposición completa de sus ingredientes en elementos básicos.
 3. ¿Qué me falta para craftear un objeto?
     - Estado: ***Pendiente***

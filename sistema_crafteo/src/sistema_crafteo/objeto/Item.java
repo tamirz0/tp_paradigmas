@@ -1,5 +1,6 @@
 package sistema_crafteo.objeto;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -39,15 +40,15 @@ public abstract class Item {
 	}
 	
 	public Map<Item, Integer> getIngredientesBasicos(){
-		return null;
+		Map<Item, Integer> ingrediente = new HashMap<>();
+		ingrediente.put(this, 1);
+		return ingrediente;
 	}
 	
-	protected Map<Item, Integer> getIngredientesBasicos(int n){
-		return null;
-	}
-	
-	public int cantidadCrafteos(int n) {
-		return 1;
+	protected Map<Item, Integer> getIngredientesBasicos(int cantidadPedida){
+		Map<Item, Integer> ingrediente = new HashMap<>();
+		ingrediente.put(this, cantidadPedida);
+		return ingrediente;
 	}
 
 	@Override
@@ -66,7 +67,6 @@ public abstract class Item {
 		Item other = (Item) obj;
 		return Objects.equals(nombre, other.nombre);
 	}
-	
 	
 	
 }
