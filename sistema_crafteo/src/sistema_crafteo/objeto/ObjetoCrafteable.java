@@ -2,6 +2,7 @@ package sistema_crafteo.objeto;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class ObjetoCrafteable extends Item {
 	private final List<Receta> recetas; // Cambiar en un futuro por un TreeSet ordenado por tiempo de receta
@@ -23,7 +24,12 @@ public class ObjetoCrafteable extends Item {
 		this.tiempoCrafteo = tiempoCrafteo;
 
 	}
-
+	
+	@Override
+	public String toString() {
+		return "Crafteable " + nombre;
+	}
+	
 	@Override
 	public boolean esCrafteable() {
 		return true;
@@ -71,6 +77,14 @@ public class ObjetoCrafteable extends Item {
 		
 		
 		return getTiempoCrafteoTotal() * crafteos;
+	}
+	
+	public List<Map<Item,Integer>> getIngredientes() {
+		List<Map<Item, Integer>> ingredientesPorReceta = new LinkedList<>();
+		for (Receta receta : recetas) {
+			ingredientesPorReceta.add(receta.getIngredientes());
+		}
+		return ingredientesPorReceta;
 	}
 	
 }

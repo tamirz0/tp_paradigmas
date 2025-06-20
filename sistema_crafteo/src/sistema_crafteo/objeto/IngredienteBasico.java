@@ -16,5 +16,11 @@ public class IngredienteBasico extends Item {
 		return 0;
 	}
 
+	@Override
+	public String toString() {
+		return "Basico " + nombre;
+	}
+	
+	
 	
 }
