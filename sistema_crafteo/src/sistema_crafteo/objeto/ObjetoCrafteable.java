@@ -16,7 +16,9 @@ public class ObjetoCrafteable extends Item {
 
 		this.recetas = new LinkedList<>();
 		for (Receta receta : recetas) {
-			this.recetas.add(receta);
+			if(receta != null) {
+				this.recetas.add(receta);
+			}
 		}
 		this.tiempoCrafteo = tiempoCrafteo;
 
@@ -45,5 +47,30 @@ public class ObjetoCrafteable extends Item {
 	public int getTiempoCrafteoTotal() { // utiliza la primer receta guardada
 		return tiempoCrafteo + recetas.get(0).getTiempoReceta();
 	}
-
+	
+	@Override
+	public int getTiempoCrafteoTotal(int n) {
+		if(recetas.isEmpty()) {
+			throw new NullPointerException("El objeto no posee recetas");
+		}
+		
+		if(n <= 0) {
+			return 0;
+		}
+		
+		int cantidadGenerada = recetas.get(0).getCantidadGenerada();
+		int crafteos;
+		
+		if(n > cantidadGenerada) {
+			int div = n / cantidadGenerada;
+			crafteos = n % cantidadGenerada == 0 ? div : div + 1;
+		}
+		else{
+			crafteos = 1;
+		}
+		
+		
+		return getTiempoCrafteoTotal() * crafteos;
+	}
+	
 }

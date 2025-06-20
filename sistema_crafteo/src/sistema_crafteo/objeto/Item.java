@@ -15,6 +15,9 @@ public abstract class Item {
 	public abstract int getTiempoCrafteo();
 	public abstract int getTiempoCrafteoTotal();
 	
+	public int getTiempoCrafteoTotal(int n) {
+		return 0;
+	}
 
 	public boolean esCrafteable() {
 		return false; // Por defecto NO es crafteable
