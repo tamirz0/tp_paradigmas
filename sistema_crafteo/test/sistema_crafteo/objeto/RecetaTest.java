@@ -74,20 +74,25 @@ class RecetaTest {
 			});
 			assertEquals("Parametro nulo", e.getMessage());
 		}
-		
+
 		@Test
 		void crearReceta_ingredientesVacio_lanzaExcepcion() {
 			Map<Item, Integer> aux = new HashMap<>();
 			Exception e = assertThrows(IllegalArgumentException.class, () -> {
 				receta = new Receta(aux, null);
 			});
-			
+
 			assertEquals("Sin ingredientes", e.getMessage());
 		}
-		
+
 		@Test
 		void crearReceta_cantidadGeneradaNegativa_lanzaExcepcion() {
+			Map<Item, Integer> ing = receta.getIngredientes();
+			Exception e = assertThrows(IllegalArgumentException.class, () -> {
+				 receta = new Receta(ing, null, -1);
+			});
 			
+			assertEquals("Cantidad generada menor o igual a cero", e.getMessage());
 		}
 
 	}

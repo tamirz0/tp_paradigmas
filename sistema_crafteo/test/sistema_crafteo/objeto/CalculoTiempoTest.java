@@ -104,7 +104,7 @@ class CalculoTiempoTest {
 		//	(x5)M(3) -> Se genera en 2 crafteos porque fabrica de a 4.
 		//		|
 		//		MC
-		//T = 2 * (10 + 2 * 3) + 15 = 41
+		//T = 2 * (10 + 2 * 3) + 15 = 47
 		
 		int esperado = 47;
 		
