@@ -81,7 +81,7 @@ public class Receta {
 			Integer valor = entrada.getValue();
 
 			aux = key.getIngredientesBasicos(crafteosNecesarios * valor); // es lo mismo que hacer getRecetasBasicas
-			OperacionesMap.sumarValores(basicos, aux);
+			OperacionesMap.sumarTodo(basicos, aux);
 		}
 
 		return basicos;

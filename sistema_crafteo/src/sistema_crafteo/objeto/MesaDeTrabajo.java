@@ -1,5 +1,7 @@
 package sistema_crafteo.objeto;
 
+import java.util.Objects;
+
 public class MesaDeTrabajo { // Se craftean instantaneamente, solo acepta recetaCreacion con ingredientes
 								// basicos. Por un tema de complejidad.
 	private final String nombre;
@@ -26,6 +28,23 @@ public class MesaDeTrabajo { // Se craftean instantaneamente, solo acepta receta
 
 		this.nombre = nombre;
 		this.recetaCreacion = receta;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(nombre);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MesaDeTrabajo other = (MesaDeTrabajo) obj;
+		return Objects.equals(nombre, other.nombre);
 	}
 
 }
