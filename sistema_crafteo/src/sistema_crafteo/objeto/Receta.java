@@ -15,16 +15,16 @@ public class Receta {
 		if (ingredientes.isEmpty()) {
 			throw new IllegalArgumentException("Sin ingredientes");
 		}
-		
-		if(cantidadGenerada <= 0) {
+
+		if (cantidadGenerada <= 0) {
 			throw new IllegalArgumentException("Cantidad generada menor o igual a cero");
 		}
-		
+
 		this.cantidadGenerada = cantidadGenerada;
 		this.ingredientes = ingredientes;
 		this.mesaRequerida = mesaRequerida;
 	}
-	
+
 	public Receta(Map<Item, Integer> ingredientes, MesaDeTrabajo mesaRequerida) {
 		if (ingredientes == null) {
 			throw new IllegalArgumentException("Parametro nulo");
@@ -32,19 +32,18 @@ public class Receta {
 		if (ingredientes.isEmpty()) {
 			throw new IllegalArgumentException("Sin ingredientes");
 		}
-		
+
 		this.cantidadGenerada = 1;
 		this.ingredientes = ingredientes;
 		this.mesaRequerida = mesaRequerida;
 	}
-	
+
 	public Receta() {
 		ingredientes = new HashMap<Item, Integer>();
 		mesaRequerida = null;
 		cantidadGenerada = 1;
 	}
-	
-	
+
 	/*
 	 * Util para cuando implementemos JSON public Receta(int cantidadProducida,
 	 * MesaDeTrabajo mesaRequerida, Map<String, Integer> ingredientes) {
@@ -74,9 +73,48 @@ public class Receta {
 	public MesaDeTrabajo getMesaRequerida() {
 		return mesaRequerida;
 	}
-	
+
 	public int getCantidadGenerada() {
 		return this.cantidadGenerada;
 	}
-
+	
+	public Map<Item, Integer> getRecetasBasicas(int crafteosNecesarios){
+		Map<Item, Integer> basicos = new HashMap<>();
+		Map<Item, Integer> aux;
+		
+		for(Map.Entry<Item, Integer> entrada : ingredientes.entrySet()) {
+			Item key = entrada.getKey();
+			Integer valor = entrada.getValue();
+			
+			aux = key.getIngredientesBasicos(crafteosNecesarios * valor); // es lo mismo que hacer getRecetasBasicas
+			sumarValores(basicos, aux);
+		}
+		
+		return basicos;
+	}
+	/*
+	public Map<Item, Integer> getRecetasBasicas() {
+		Map<Item, Integer> basicos = new HashMap<>();
+		Map<Item, Integer> aux;
+		
+		for (Map.Entry<Item, Integer> entrada : ingredientes.entrySet()) {
+			Item key = entrada.getKey();
+			Integer valor = entrada.getValue();
+			
+			aux = key.getIngredientesBasicos(valor, 1);
+			sumarValores(basicos, aux);
+		}
+		
+		return basicos;
+	}
+	*/
+	
+	private Map<Item, Integer> sumarValores(Map<Item, Integer> destino, Map<Item, Integer> origen){
+		for(Map.Entry<Item, Integer> entrada : origen.entrySet()) {
+			int actual = destino.getOrDefault(entrada.getKey(), 0);
+			destino.put(entrada.getKey(), actual + entrada.getValue());
+		}
+		return destino;
+	}
+	
 }

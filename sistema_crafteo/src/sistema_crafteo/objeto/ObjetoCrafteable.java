@@ -79,10 +79,61 @@ public class ObjetoCrafteable extends Item {
 		return getTiempoCrafteoTotal() * crafteos;
 	}
 	
-	public List<Map<Item,Integer>> getIngredientes() {
+	@Override
+	public int cantidadCrafteos(int cantidadPedida) {
+		if(recetas.isEmpty()) {
+			return 0;
+		}
+		
+		if(cantidadPedida <= 0) {
+			return 0;
+		}
+		
+		int cantidadGenerada = recetas.get(0).getCantidadGenerada();
+		int crafteos;
+		
+		if(cantidadPedida > cantidadGenerada) {
+			int div = cantidadPedida / cantidadGenerada;
+			crafteos = cantidadPedida % cantidadGenerada == 0 ? div : div + 1;
+		}
+		else{
+			crafteos = 1;
+		};
+		
+		return crafteos;
+	}
+	
+	public Map<Item, Integer> getIngredientes(){
+		return recetas.isEmpty() ? null : recetas.get(0).getIngredientes();
+	}
+	
+	public List<Map<Item, Integer>> getIngredientesTodos() {
 		List<Map<Item, Integer>> ingredientesPorReceta = new LinkedList<>();
 		for (Receta receta : recetas) {
 			ingredientesPorReceta.add(receta.getIngredientes());
+		}
+		return ingredientesPorReceta;
+	}
+	
+	@Override
+	public Map<Item, Integer> getIngredientesBasicos(){
+		return recetas.isEmpty() ? null : recetas.get(0).getRecetasBasicas(1);
+	}
+	
+	@Override
+	protected Map<Item, Integer> getIngredientesBasicos(int crafteosValor){
+		if(recetas.isEmpty()) {
+			return null;
+		}
+		int crafteos = cantidadCrafteos(crafteosValor);
+		return recetas.get(0).getRecetasBasicas(crafteos);
+	}
+	
+	
+	public List<Map<Item, Integer>> getIngredientesBasicosTodos(){
+		List<Map<Item, Integer>> ingredientesPorReceta = new LinkedList<>();
+		for (Receta receta : recetas) {
+			ingredientesPorReceta.add(receta.getRecetasBasicas(1));
 		}
 		return ingredientesPorReceta;
 	}

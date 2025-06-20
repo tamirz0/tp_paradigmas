@@ -1,5 +1,8 @@
 package sistema_crafteo.objeto;
 
+import java.util.Map;
+import java.util.Objects;
+
 public abstract class Item {
 	protected final String nombre;
 	protected final String descripcion;
@@ -34,5 +37,36 @@ public abstract class Item {
 	public String getDescripcion() {
 		return descripcion;
 	}
+	
+	public Map<Item, Integer> getIngredientesBasicos(){
+		return null;
+	}
+	
+	protected Map<Item, Integer> getIngredientesBasicos(int n){
+		return null;
+	}
+	
+	public int cantidadCrafteos(int n) {
+		return 1;
+	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(nombre);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Item other = (Item) obj;
+		return Objects.equals(nombre, other.nombre);
+	}
+	
+	
+	
 }

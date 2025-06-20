@@ -69,9 +69,9 @@ class ObjetoCrafteableTest {
 			
 			ObjetoCrafteable o2 = new ObjetoCrafteable("Antorcha", " ", 1, r2, r1);
 			
-			List<Map<Item,Integer>> ingredientes = o2.getIngredientes();
+			List<Map<Item,Integer>> ingredientes = o2.getIngredientesTodos();
 			
-			assertTrue(o1.getIngredientes().contains(ing1));
+			assertTrue(o1.getIngredientesTodos().contains(ing1));
 			assertTrue(ingredientes.contains(ing1) && ingredientes.contains(ing2));
 		}
 		
