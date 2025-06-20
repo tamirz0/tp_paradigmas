@@ -6,7 +6,25 @@ import java.util.Map;
 public class Receta {
 	private final Map<Item, Integer> ingredientes;
 	private MesaDeTrabajo mesaRequerida;
+	private final int cantidadGenerada;
 
+	public Receta(Map<Item, Integer> ingredientes, MesaDeTrabajo mesaRequerida, int cantidadGenerada) {
+		if (ingredientes == null) {
+			throw new IllegalArgumentException("Parametro nulo");
+		}
+		if (ingredientes.isEmpty()) {
+			throw new IllegalArgumentException("Sin ingredientes");
+		}
+		
+		if(cantidadGenerada <= 0) {
+			throw new IllegalArgumentException("Cantidad generada menor o igual a cero");
+		}
+		
+		this.cantidadGenerada = cantidadGenerada;
+		this.ingredientes = ingredientes;
+		this.mesaRequerida = mesaRequerida;
+	}
+	
 	public Receta(Map<Item, Integer> ingredientes, MesaDeTrabajo mesaRequerida) {
 		if (ingredientes == null) {
 			throw new IllegalArgumentException("Parametro nulo");
@@ -14,7 +32,8 @@ public class Receta {
 		if (ingredientes.isEmpty()) {
 			throw new IllegalArgumentException("Sin ingredientes");
 		}
-
+		
+		this.cantidadGenerada = 1;
 		this.ingredientes = ingredientes;
 		this.mesaRequerida = mesaRequerida;
 	}
@@ -22,6 +41,7 @@ public class Receta {
 	public Receta() {
 		ingredientes = new HashMap<Item, Integer>();
 		mesaRequerida = null;
+		cantidadGenerada = 1;
 	}
 	
 	
@@ -37,7 +57,7 @@ public class Receta {
 		for (Map.Entry<Item, Integer> entrada : ingredientes.entrySet()) {
 			Item key = entrada.getKey();
 			Integer valor = entrada.getValue();
-			tiempo += key.getTiempoCrafteoTotal() * valor;
+			tiempo += key.getTiempoCrafteoTotal(valor);
 		}
 
 		if (mesaRequerida != null) {
@@ -53,6 +73,10 @@ public class Receta {
 
 	public MesaDeTrabajo getMesaRequerida() {
 		return mesaRequerida;
+	}
+	
+	public int getCantidadGenerada() {
+		return this.cantidadGenerada;
 	}
 
 }

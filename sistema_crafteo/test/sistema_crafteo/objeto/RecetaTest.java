@@ -84,6 +84,11 @@ class RecetaTest {
 			
 			assertEquals("Sin ingredientes", e.getMessage());
 		}
+		
+		@Test
+		void crearReceta_cantidadGeneradaNegativa_lanzaExcepcion() {
+			
+		}
 
 	}
 
