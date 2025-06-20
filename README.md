@@ -1,12 +1,16 @@
 # tp_paradigmas
 Trabajo Practico "Sistema de Crafteo" de la materia Paradigmas de Programacion. Grupo KAPPA 1C2025
 
-## Todas las funciones nombradas a continuacion deben ser implementadas en el codigo, y ser testeadas en JUNIT 5.
-- Estados posibles: 
-    - Pendiente
-    - En desarrollo
-    - Implementado
-    - Implementado y testeado
+## Acerca del sistema
+Se busca representar recetas de crafteo, ingredientes básicos, objetos intermedios y un inventario del jugador, sin utilizar estructuras de grafos. Además, se espera que la solución pueda adaptarse fácilmente a la incorporación de nuevos objetos, ingredientes o reglas.
+
+## Aclaracion seguimiento de avances 
+- Se deben cumplir las funcionalidades agregadas en este documento.
+- Estados posibles de las funcionalidades a desarrollar: 
+    1. Pendiente
+    2. En desarrollo
+    3. Implementado
+    4. Implementado y testeado
 
 ## Funcionalidades basicas
 1. ¿Que necesito para craftear un objeto? 
