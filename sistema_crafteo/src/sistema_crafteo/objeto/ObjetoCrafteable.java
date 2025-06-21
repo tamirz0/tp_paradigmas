@@ -91,7 +91,8 @@ public class ObjetoCrafteable extends Item {
 		int crafteos = cantidadCrafteos(cantidadUnidades);
 		return recetas.isEmpty() ? null : recetas.get(0).getRecetasBasicas(crafteos);
 	}
-
+	
+	@Override
 	public List<Map<Item, Integer>> getIngredientesBasicosTodos() {
 		List<Map<Item, Integer>> ingredientesPorReceta = new LinkedList<>();
 		for (Receta receta : recetas) {
