@@ -67,6 +67,7 @@ public class ObjetoCrafteable extends Item {
 		return getTiempoCrafteoTotal() * crafteos;
 	}
 
+	@Override
 	public Map<Item, Integer> getIngredientes() {
 		return recetas.isEmpty() ? null : recetas.get(0).getIngredientes();
 	}

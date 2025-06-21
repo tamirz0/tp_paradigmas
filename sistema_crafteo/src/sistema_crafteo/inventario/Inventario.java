@@ -55,5 +55,9 @@ public class Inventario {
 	public Map<Item, Integer> getItems() {
 		return this.items;
 	}
-
+	
+	public void setItems(Map<Item, Integer> items) {
+		this.items = items;
+	}
+	
 }

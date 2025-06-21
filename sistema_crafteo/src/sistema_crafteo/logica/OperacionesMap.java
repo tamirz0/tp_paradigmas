@@ -1,5 +1,6 @@
 package sistema_crafteo.logica;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class OperacionesMap {
@@ -32,4 +33,25 @@ public class OperacionesMap {
 		return destino;
 	}
 
+	public static <T> Map<T, Integer> restarTodo(Map<T, Integer> mayor, Map<T, Integer> menor) {
+		Map<T, Integer> mapRet = new HashMap<>();
+		mapRet.putAll(mayor);
+		for (Map.Entry<T, Integer> entrada : mayor.entrySet()) {
+			int valorARestar = menor.getOrDefault(entrada.getKey(), 0);
+			int actual = entrada.getValue();
+			int nuevoValor = actual > valorARestar ? actual - valorARestar : 0;
+			mapRet.put(entrada.getKey(), nuevoValor);
+		}
+		return mapRet;
+	}
+	
+	public static <T> Map<T, Integer> quitarKeysConValorCero(Map<T, Integer> dic){
+		Map<T, Integer> nuevoDic = new HashMap<T, Integer>();
+		nuevoDic.putAll(dic);
+		for (T t : dic.keySet()) {
+			nuevoDic.remove(t, 0);
+		}
+		return nuevoDic;
+	}
+	
 }

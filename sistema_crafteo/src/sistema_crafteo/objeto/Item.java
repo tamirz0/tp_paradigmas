@@ -39,6 +39,10 @@ public abstract class Item {
 		return descripcion;
 	}
 	
+	public Map<Item, Integer> getIngredientes(){
+		return null;
+	}
+	
 	public Map<Item, Integer> getIngredientesBasicos(){
 		Map<Item, Integer> ingrediente = new HashMap<>();
 		ingrediente.put(this, 1);
