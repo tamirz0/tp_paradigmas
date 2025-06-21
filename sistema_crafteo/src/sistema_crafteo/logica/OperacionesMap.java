@@ -12,7 +12,7 @@ public class OperacionesMap {
 	public static <T> void restarValor(Map<T, Integer> destino, T key, Integer cantidadEliminada) {
 		Integer actual = destino.get(key);
 		if (actual == null) { // No existe la key
-			return;
+			throw new IllegalArgumentException("El item no existe");
 		}
 
 		if (actual < cantidadEliminada) {

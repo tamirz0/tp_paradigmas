@@ -19,6 +19,9 @@ public class Inventario {
 	}
 
 	public void recolectarItem(Item item, int cantidad) {
+		if(item == null) {
+			throw new NullPointerException("Item nulo");
+		}
 		if (item.esCrafteable()) {
 			throw new IllegalArgumentException("Item no recolectable");
 		}
