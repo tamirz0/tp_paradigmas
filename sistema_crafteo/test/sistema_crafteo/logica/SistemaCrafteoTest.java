@@ -1,14 +1,126 @@
 package sistema_crafteo.logica;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
+import sistema_crafteo.inventario.Inventario;
+import sistema_crafteo.objeto.IngredienteBasico;
+import sistema_crafteo.objeto.Item;
+import sistema_crafteo.objeto.ObjetoCrafteable;
+import sistema_crafteo.objeto.Receta;
 
 class SistemaCrafteoTest {
 
-	@Test
-	void test() {
-		assertTrue(true);
+	@Nested
+	class FaltantesCrearObjeto {
+		SistemaCrafteo sistema = new SistemaCrafteo();
+		ObjetoCrafteable espada = getEspada();
+		Inventario miInventario = new Inventario();
+
+		@BeforeEach
+		void setup() {
+			sistema.registrarItem(espada);
+		}
+
+		@Test
+		void getIngredientesFaltantes_inventarioConMenosItemsQueReceta_retornaFaltantesCorrectos() {
+			List<Item> ingredientesEspada = getIngredientesALista(espada);
+			Map<Item, Integer> itemsMiInventario = new HashMap<Item, Integer>();
+
+			Item palo = ingredientesEspada.get(0);
+			Item metal = ingredientesEspada.get(1);
+			Item piedra = ingredientesEspada.get(2);
+			itemsMiInventario.put(palo, 9); // Palo
+			itemsMiInventario.put(metal, 5); // Metal
+			itemsMiInventario.put(piedra, 2); // Piedra
+
+			sistema.registrarItem(espada);
+			sistema.registrarItem(new IngredienteBasico("Prueba", " "));
+
+			Inventario miInventario = new Inventario();
+			miInventario.setItems(itemsMiInventario);
+
+			int esperado = 3;
+			int actual = sistema.getIngredientesFaltantes(espada, miInventario).getOrDefault(piedra, 0);
+			assertEquals(esperado, actual);
+			assertNull(sistema.getIngredientesFaltantes(espada, miInventario).get(palo));
+			assertNull(sistema.getIngredientesFaltantes(espada, miInventario).get(metal));			
+		}
+
+		@Test
+		void getIngredientesFaltantes_inventarioConMasItemsQueReceta_retornaMapVacio() {
+			List<Item> ingredientesEspada = getIngredientesALista(espada);
+			Map<Item, Integer> itemsMiInventario = new HashMap<Item, Integer>();
+
+			Item palo = ingredientesEspada.get(0);
+			Item metal = ingredientesEspada.get(1);
+			Item piedra = ingredientesEspada.get(2);
+			itemsMiInventario.put(palo, 99); // Palo
+			itemsMiInventario.put(metal, 99); // Metal
+			itemsMiInventario.put(piedra, 99); // Piedra
+
+			miInventario.setItems(itemsMiInventario);
+
+			boolean actual = sistema.getIngredientesFaltantes(espada, miInventario).isEmpty();
+			assertTrue(actual);
+		}
+
+		@Test
+		void getIngredientesFaltantes_itemNoCrafteable_retornaNull() {
+			IngredienteBasico a = new IngredienteBasico("prueba", "");
+			assertNull(sistema.getIngredientesFaltantes(a, miInventario));
+		}
+
+		private static ObjetoCrafteable getEspada() {
+
+			IngredienteBasico madera = new IngredienteBasico("Madera", " ");
+			IngredienteBasico roca = new IngredienteBasico("Roca", " ");
+			IngredienteBasico metal = new IngredienteBasico("Metal", " ");
+
+			Receta recetaEspada;
+			Receta recetaPalo;
+			Receta recetaPiedra;
+
+			Map<Item, Integer> ingredientes = new HashMap<>();
+
+			ingredientes.put(madera, 2);
+
+			recetaPalo = new Receta(ingredientes, null, 3);
+
+			ingredientes = new HashMap<Item, Integer>();
+			ingredientes.put(roca, 3);
+			ingredientes.put(metal, 3);
+
+			recetaPiedra = new Receta(ingredientes, null, 2);
+
+			ObjetoCrafteable palo = new ObjetoCrafteable("Palo", " ", 5, recetaPalo);
+			ObjetoCrafteable piedra = new ObjetoCrafteable("Piedra", " ", 10, recetaPiedra);
+
+			ingredientes = new HashMap<Item, Integer>();
+			ingredientes.put(metal, 2);
+			ingredientes.put(piedra, 5);
+			ingredientes.put(palo, 9);
+
+			recetaEspada = new Receta(ingredientes, null, 1);
+
+			ObjetoCrafteable espada = new ObjetoCrafteable("Espada", " ", 10, recetaEspada, recetaPiedra);
+			return espada;
+		}
+
+		private static List<Item> getIngredientesALista(ObjetoCrafteable obj) {
+			List<Item> ingredientesEspada = new ArrayList<>(obj.getIngredientes().keySet());
+			return ingredientesEspada;
+		}
 	}
 
 }

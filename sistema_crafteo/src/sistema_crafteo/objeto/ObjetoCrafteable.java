@@ -71,7 +71,8 @@ public class ObjetoCrafteable extends Item {
 	public Map<Item, Integer> getIngredientes() {
 		return recetas.isEmpty() ? null : recetas.get(0).getIngredientes();
 	}
-
+	
+	@Override
 	public List<Map<Item, Integer>> getIngredientesTodos() {
 		List<Map<Item, Integer>> ingredientesPorReceta = new LinkedList<>();
 		for (Receta receta : recetas) {

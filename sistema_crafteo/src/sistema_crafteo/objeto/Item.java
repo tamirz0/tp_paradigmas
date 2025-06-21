@@ -1,6 +1,7 @@
 package sistema_crafteo.objeto;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -40,6 +41,10 @@ public abstract class Item {
 	}
 	
 	public Map<Item, Integer> getIngredientes(){
+		return null;
+	}
+	
+	public List<Map<Item, Integer>> getIngredientesTodos(){
 		return null;
 	}
 	
