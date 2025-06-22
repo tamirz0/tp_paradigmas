@@ -100,8 +100,9 @@ public class ObjetoCrafteable extends Item {
 		}
 		return ingredientesPorReceta;
 	}
-
-	private int cantidadCrafteos(int cantidadPedida) {
+	
+	@Override
+	public int cantidadCrafteos(int cantidadPedida) {
 		if (recetas.isEmpty()) {
 			return 0;
 		}

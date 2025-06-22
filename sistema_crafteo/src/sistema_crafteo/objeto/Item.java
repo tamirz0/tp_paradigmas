@@ -67,6 +67,10 @@ public abstract class Item {
 		return lista;
 	}
 	
+	public int cantidadCrafteos(int cantidadPedida) {
+		return 0;
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(nombre);
