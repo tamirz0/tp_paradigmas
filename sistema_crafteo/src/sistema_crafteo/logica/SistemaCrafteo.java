@@ -1,5 +1,6 @@
 package sistema_crafteo.logica;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Set;
 
 import sistema_crafteo.inventario.Inventario;
 import sistema_crafteo.objeto.Item;
+import sistema_crafteo.objeto.Receta;
 
 public class SistemaCrafteo {
 	private Set<Item> itemsRegistrados;
@@ -87,6 +89,18 @@ public class SistemaCrafteo {
 		return ret;
 	}
 	
+	public boolean puedeCraftear(Inventario inventario, Item item) {
+		return getIngredientesFaltantes(item, inventario).isEmpty();
+	}
+	
+	public boolean puedeCraftearBasicos(Inventario inventario, Item item) {
+		return getIngredientesBasicosFaltantes(item, inventario).isEmpty();
+	}
+	
+	public int getCantidadMaximaCrafteable(Item item, Inventario inventario) {
+		
+	}
+	
 	public Set<Item> getItemsRegistrados() {
 		return itemsRegistrados;
 	}
@@ -95,4 +109,11 @@ public class SistemaCrafteo {
 		return historial;
 	}
 
+	private Map<Item, Integer> ejecutarReceta(Map<Item, Integer> items, Receta receta, int cantidad){
+		Map<Item, Integer> aux = new HashMap<Item, Integer>();
+		
+		
+		return aux;
+	}
+	
 }
