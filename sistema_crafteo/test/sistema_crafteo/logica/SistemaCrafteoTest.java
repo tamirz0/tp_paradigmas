@@ -120,6 +120,34 @@ class SistemaCrafteoTest {
 			assertTrue(actual.isEmpty());
 		}
 
+		@Test
+		void getIngredientesBasicosFaltantes_inventarioConMenosCrafteablesPeroMasBasicos_retornaBasicosNecesarios() {
+			List<Item> ingredientesEspada = getIngredientesALista(espada);
+			List<Item> ingredientesBasicosEspada = getIngredientesBasicosALista(espada);
+			Map<Item, Integer> itemsMiInventario = new HashMap<Item, Integer>();
+
+			Item palo = ingredientesEspada.get(0);
+			Item metal = ingredientesEspada.get(1);
+			Item piedra = ingredientesEspada.get(2);
+			Item madera = ingredientesBasicosEspada.get(0);
+			Item roca = ingredientesBasicosEspada.get(2);
+
+			itemsMiInventario.put(madera, 1);
+			itemsMiInventario.put(roca, 1);
+			itemsMiInventario.put(metal, 2);
+
+			itemsMiInventario.put(palo, 8); // Palo
+			itemsMiInventario.put(piedra, 4); // Piedra
+
+			miInventario.setItems(itemsMiInventario);
+
+			Map<Item, Integer> actual = sistema.getIngredientesBasicosFaltantes(espada, miInventario);
+
+			assertEquals(3, actual.get(metal));
+			assertEquals(1, actual.get(madera));
+			assertEquals(2, actual.get(roca));
+		}
+
 		private static ObjetoCrafteable getEspada() {
 
 			IngredienteBasico madera = new IngredienteBasico("Madera", " ");
