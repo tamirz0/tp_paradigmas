@@ -220,7 +220,63 @@ class SistemaCrafteoTest {
 			int actual = sistema.getCantidadMaximaCrafteable(miInventario, espada);
 			assertEquals(2, actual);
 		}
+		
+		@Test
+		void craftear_conIngredientesNecesariosPrimerNivel_crafteaCorrectamente() {
+			List<Item> ingredientesEspada = getIngredientesALista(espada);
+			Map<Item, Integer> itemsMiInventario = new HashMap<Item, Integer>();
 
+			Item palo = ingredientesEspada.get(0);
+			Item metal = ingredientesEspada.get(1);
+			Item piedra = ingredientesEspada.get(2);
+			
+			itemsMiInventario.put(palo, 9);
+			itemsMiInventario.put(piedra, 5);
+			itemsMiInventario.put(metal, 2);
+			
+			miInventario.setItems(itemsMiInventario);
+
+			
+			sistema.craftear(miInventario, espada);
+			Map<Item, Integer> esperado = new HashMap<Item, Integer>();
+			esperado.put(espada, 1);
+			
+			Map<Item, Integer> actual = miInventario.getItems();
+			assertEquals(esperado, actual);
+		}
+		
+		@Test
+		void craftear_fabricandoIngredientesIntermedios_crafteaCorrectamente() {
+			List<Item> ingredientesEspada = getIngredientesALista(espada);
+			List<Item> ingredientesBasicosEspada = getIngredientesBasicosALista(espada);
+			Map<Item, Integer> itemsMiInventario = new HashMap<Item, Integer>();
+
+			Item palo = ingredientesEspada.get(0);
+			Item metal = ingredientesEspada.get(1);
+			Item piedra = ingredientesEspada.get(2);
+			Item madera = ingredientesBasicosEspada.get(0);
+			Item roca = ingredientesBasicosEspada.get(2);
+
+			itemsMiInventario.put(madera, 5);
+			itemsMiInventario.put(roca, 10);
+			itemsMiInventario.put(metal, 5);
+
+			itemsMiInventario.put(palo, 7); 
+			itemsMiInventario.put(piedra, 3); 
+
+			miInventario.setItems(itemsMiInventario);
+			
+			sistema.craftear(miInventario, espada);
+			Map<Item, Integer> actual = miInventario.getItems();
+			Map<Item, Integer> esperado = new HashMap<Item, Integer>();
+			esperado.put(madera, 3);
+			esperado.put(roca, 7);
+			esperado.put(palo, 1);
+			esperado.put(espada, 1);
+			
+			assertEquals(esperado, actual);
+		}
+		
 		private static ObjetoCrafteable getEspada() {
 
 			IngredienteBasico madera = new IngredienteBasico("Madera", " ");

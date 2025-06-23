@@ -30,10 +30,10 @@ Se busca representar recetas de crafteo, ingredientes básicos, objetos intermed
     - Estado: ***Implementado y testeado***
     - Descripcion: Dado un objeto y un inventario, indicar cuántas unidades del objeto se pueden fabricar utilizando los elementos del inventario (y fabricando los ingredientes intermedios si es necesario).
 6. Realizar el crafteo indicado
-    - Estado: ***Pendiente***
+    - Estado: ***Implementado y testeado***
     - Descripcion: El inventario dispone de ciertos elementos y objetos en principio, y debe poderse ejecutar un crafteo. Esto es una acción que modifica el contenido del inventario, el cual debe actualizarse en consecuencia.
 7. En todos los casos, indicar los tiempos necesarios
-    - Estado: ***Implementado y testeado***
+    - Estado: ***Implementado y testeado, falta agregarlo a cada funcionalidad***
     - Descripcion: Craftear, por su naturaleza, requiere de un tiempo. No es instantáneo, y esos tiempos deben considerarse e informarse en cada una de las preguntas anteriores. Al realizar crafteos en cadena, los tiempos deben sumarse, y multiplicarse apropiadamente de acuerdo a la cantidad de unidades involucradas.
 8. Historial de crafteos
     - Estado: ***Pendiente***

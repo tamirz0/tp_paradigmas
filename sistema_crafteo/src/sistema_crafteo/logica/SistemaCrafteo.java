@@ -126,29 +126,75 @@ public class SistemaCrafteo {
 		copiaItemsInventario.putAll(inventario.getItems());
 		modificable.setItems(copiaItemsInventario);
 
-		while (puedeCraftear(modificable, item) || puedeCraftearBasicos(modificable, item)) {
-			Map<Item, Integer> objetos = modificable.getItems();
+		/*
+		 * while (puedeCraftear(modificable, item) || puedeCraftearBasicos(modificable,
+		 * item)) { Map<Item, Integer> objetos = modificable.getItems();
+		 * 
+		 * if (!puedeCraftear(modificable, item)) { Map<Item, Integer> faltantes =
+		 * getIngredientesFaltantes(item, modificable); Map<Item, Integer>
+		 * faltantesABasicos = obtenerBasicos(faltantes);
+		 * 
+		 * for (Map.Entry<Item, Integer> entrada : faltantes.entrySet()) { Item
+		 * ingrediente = entrada.getKey(); Integer cantidadFaltante =
+		 * entrada.getValue(); OperacionesMap.sumarValor(objetos, ingrediente,
+		 * ingrediente.getCantidadGenerada() *
+		 * ingrediente.cantidadCrafteos(cantidadFaltante)); }
+		 * 
+		 * objetos = OperacionesMap.restarTodo(objetos, faltantesABasicos); }
+		 * 
+		 * objetos = OperacionesMap.restarTodo(objetos, item.getIngredientes());
+		 * modificable.setItems(objetos); cantidad++; }
+		 */
 
-			if (!puedeCraftear(modificable, item)) {
-				Map<Item, Integer> faltantes = getIngredientesFaltantes(item, modificable);
-				Map<Item, Integer> faltantesABasicos = obtenerBasicos(faltantes);
-
-				for (Map.Entry<Item, Integer> entrada : faltantes.entrySet()) {
-					Item ingrediente = entrada.getKey();
-					Integer cantidadFaltante = entrada.getValue();
-					OperacionesMap.sumarValor(objetos, ingrediente,
-							ingrediente.getCantidadGenerada() * ingrediente.cantidadCrafteos(cantidadFaltante));
-				}
-
-				objetos = OperacionesMap.restarTodo(objetos, faltantesABasicos);
-			}
-
-			objetos = OperacionesMap.restarTodo(objetos, item.getIngredientes());
-			modificable.setItems(objetos);
+		while (ejecutarCrafteo(modificable, item)) {
 			cantidad++;
 		}
 
 		return cantidad;
+	}
+
+	public boolean craftear(Inventario inventario, Item item) {
+		if(!ejecutarCrafteo(inventario, item)) {
+			return false;
+		}
+		
+		HistorialCrafteo registro = new HistorialCrafteo();
+		historial.add(registro);
+		return true;
+	}
+
+	private boolean ejecutarCrafteo(Inventario inventario, Item item) {
+		if (!item.esCrafteable()) {
+			return false;
+		}
+
+		if (!puedeCraftearBasicos(inventario, item)) {
+			return false;
+		}
+
+		Map<Item, Integer> objetos = inventario.getItems();
+
+		if (!puedeCraftear(inventario, item)) {
+			Map<Item, Integer> faltantes = getIngredientesFaltantes(item, inventario);
+			Map<Item, Integer> faltantesABasicos = obtenerBasicos(faltantes);
+
+			for (Map.Entry<Item, Integer> entrada : faltantes.entrySet()) {
+				Item ingrediente = entrada.getKey();
+				Integer cantidadFaltante = entrada.getValue();
+				OperacionesMap.sumarValor(objetos, ingrediente,
+						ingrediente.getCantidadGenerada() * ingrediente.cantidadCrafteos(cantidadFaltante));
+			}
+
+			objetos = OperacionesMap.restarTodo(objetos, faltantesABasicos);
+		}
+
+		objetos = OperacionesMap.restarTodo(objetos, item.getIngredientes());
+		OperacionesMap.sumarValor(objetos, item, item.getCantidadGenerada());
+		objetos = OperacionesMap.quitarKeysConValorCero(objetos);
+		inventario.setItems(objetos);
+		
+		
+		return true;
 	}
 
 	private Map<Item, Integer> obtenerBasicos(Map<Item, Integer> ing) {
