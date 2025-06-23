@@ -71,6 +71,10 @@ public abstract class Item {
 		return 0;
 	}
 	
+	public int getCantidadGenerada() {
+		return 0;
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(nombre);

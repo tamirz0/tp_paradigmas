@@ -27,7 +27,7 @@ Se busca representar recetas de crafteo, ingredientes básicos, objetos intermed
     - Estado: ***Implementado y testeado (falta test del getIngredientesBasicosFaltantesTodos)***
     - Descripcion: Lo mismo que el punto 3, pero considerando los elementos básicos necesarios para toda la cadena de crafteo.
 5. ¿Cuántos puedo craftear?
-    - Estado: ***Pendiente***
+    - Estado: ***Implementado y testeado***
     - Descripcion: Dado un objeto y un inventario, indicar cuántas unidades del objeto se pueden fabricar utilizando los elementos del inventario (y fabricando los ingredientes intermedios si es necesario).
 6. Realizar el crafteo indicado
     - Estado: ***Pendiente***

@@ -147,6 +147,79 @@ class SistemaCrafteoTest {
 			assertEquals(1, actual.get(madera));
 			assertEquals(2, actual.get(roca));
 		}
+		
+		@Test
+		void getCantidadMaximaCrafteable_craftea1PorPrimerNivel1PorBasicos1PorPrimerNivel_retornaTres() {
+			IngredienteBasico madera = new IngredienteBasico("Madera", " ");
+			IngredienteBasico roca = new IngredienteBasico("Roca", " ");
+			IngredienteBasico metal = new IngredienteBasico("Metal", " ");
+
+			Receta recetaEspada;
+			Receta recetaPalo;
+			Receta recetaPiedra;
+
+			Map<Item, Integer> ingredientes = new HashMap<>();
+
+			ingredientes.put(madera, 2);
+
+			recetaPalo = new Receta(ingredientes, null, 3);
+
+			ingredientes = new HashMap<Item, Integer>();
+			ingredientes.put(roca, 3);
+			ingredientes.put(metal, 3);
+
+			recetaPiedra = new Receta(ingredientes, null, 6);
+
+			ObjetoCrafteable palo = new ObjetoCrafteable("Palo", " ", 5, recetaPalo);
+			ObjetoCrafteable piedra = new ObjetoCrafteable("Piedra", " ", 10, recetaPiedra);
+
+			ingredientes = new HashMap<Item, Integer>();
+			ingredientes.put(metal, 2);
+			ingredientes.put(piedra, 5);
+			ingredientes.put(palo, 9);
+
+			recetaEspada = new Receta(ingredientes, null, 1);
+
+			ObjetoCrafteable espada2 = new ObjetoCrafteable("Espada", " ", 10, recetaEspada, recetaPiedra);
+			Map<Item, Integer> itemsMiInventario = new HashMap<Item, Integer>();
+
+			itemsMiInventario.put(madera, 10);
+			itemsMiInventario.put(roca, 11);
+			itemsMiInventario.put(metal, 10);
+
+			itemsMiInventario.put(palo, 27); 
+			itemsMiInventario.put(piedra, 9); 
+
+			miInventario.setItems(itemsMiInventario);
+
+			int actual = sistema.getCantidadMaximaCrafteable(miInventario, espada2);
+			assertEquals(3, actual);
+		}
+		
+		@Test
+		void getCantidadMaximaCrafteable_craftea1PorPrimerNivel1PorBasicos_retornaDos() {
+			List<Item> ingredientesEspada = getIngredientesALista(espada);
+			List<Item> ingredientesBasicosEspada = getIngredientesBasicosALista(espada);
+			Map<Item, Integer> itemsMiInventario = new HashMap<Item, Integer>();
+
+			Item palo = ingredientesEspada.get(0);
+			Item metal = ingredientesEspada.get(1);
+			Item piedra = ingredientesEspada.get(2);
+			Item madera = ingredientesBasicosEspada.get(0);
+			Item roca = ingredientesBasicosEspada.get(2);
+
+			itemsMiInventario.put(madera, 10);
+			itemsMiInventario.put(roca, 11);
+			itemsMiInventario.put(metal, 8);
+
+			itemsMiInventario.put(palo, 16); 
+			itemsMiInventario.put(piedra, 9); 
+
+			miInventario.setItems(itemsMiInventario);
+
+			int actual = sistema.getCantidadMaximaCrafteable(miInventario, espada);
+			assertEquals(2, actual);
+		}
 
 		private static ObjetoCrafteable getEspada() {
 

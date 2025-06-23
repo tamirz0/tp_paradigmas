@@ -71,7 +71,7 @@ public class ObjetoCrafteable extends Item {
 	public Map<Item, Integer> getIngredientes() {
 		return recetas.isEmpty() ? null : recetas.get(0).getIngredientes();
 	}
-	
+
 	@Override
 	public List<Map<Item, Integer>> getIngredientesTodos() {
 		List<Map<Item, Integer>> ingredientesPorReceta = new LinkedList<>();
@@ -91,7 +91,7 @@ public class ObjetoCrafteable extends Item {
 		int crafteos = cantidadCrafteos(cantidadUnidades);
 		return recetas.isEmpty() ? null : recetas.get(0).getRecetasBasicas(crafteos);
 	}
-	
+
 	@Override
 	public List<Map<Item, Integer>> getIngredientesBasicosTodos() {
 		List<Map<Item, Integer>> ingredientesPorReceta = new LinkedList<>();
@@ -100,7 +100,7 @@ public class ObjetoCrafteable extends Item {
 		}
 		return ingredientesPorReceta;
 	}
-	
+
 	@Override
 	public int cantidadCrafteos(int cantidadPedida) {
 		if (recetas.isEmpty()) {
@@ -122,5 +122,10 @@ public class ObjetoCrafteable extends Item {
 		}
 
 		return crafteos;
+	}
+
+	@Override
+	public int getCantidadGenerada() {
+		return this.recetas.get(0).getCantidadGenerada();
 	}
 }

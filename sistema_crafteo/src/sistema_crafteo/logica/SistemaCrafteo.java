@@ -1,5 +1,6 @@
 package sistema_crafteo.logica;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,12 +60,12 @@ public class SistemaCrafteo {
 
 	public Map<Item, Integer> getIngredientesBasicosFaltantes(Item item, Inventario inventario) {
 		if (!item.esCrafteable()) {
-			return null;
+			return new HashMap<Item, Integer>();
 		}
 
 		Map<Item, Integer> itemsFaltantes = getIngredientesFaltantes(item, inventario);
 		if (itemsFaltantes.isEmpty()) {
-			return null;
+			return itemsFaltantes;
 		}
 		Receta recetaFaltantes = new Receta(itemsFaltantes, null);
 
@@ -115,9 +116,47 @@ public class SistemaCrafteo {
 	}
 
 	public int getCantidadMaximaCrafteable(Inventario inventario, Item item) {
+		if (!item.esCrafteable()) {
+			return 0;
+		}
+
 		int cantidad = 0;
+		Inventario modificable = new Inventario();
+		Map<Item, Integer> copiaItemsInventario = new HashMap<Item, Integer>();
+		copiaItemsInventario.putAll(inventario.getItems());
+		modificable.setItems(copiaItemsInventario);
+
+		while (puedeCraftear(modificable, item) || puedeCraftearBasicos(modificable, item)) {
+			Map<Item, Integer> objetos = modificable.getItems();
+
+			if (!puedeCraftear(modificable, item)) {
+				Map<Item, Integer> faltantes = getIngredientesFaltantes(item, modificable);
+				Map<Item, Integer> faltantesABasicos = obtenerBasicos(faltantes);
+
+				for (Map.Entry<Item, Integer> entrada : faltantes.entrySet()) {
+					Item ingrediente = entrada.getKey();
+					Integer cantidadFaltante = entrada.getValue();
+					OperacionesMap.sumarValor(objetos, ingrediente,
+							ingrediente.getCantidadGenerada() * ingrediente.cantidadCrafteos(cantidadFaltante));
+				}
+
+				objetos = OperacionesMap.restarTodo(objetos, faltantesABasicos);
+			}
+
+			objetos = OperacionesMap.restarTodo(objetos, item.getIngredientes());
+			modificable.setItems(objetos);
+			cantidad++;
+		}
 
 		return cantidad;
+	}
+
+	private Map<Item, Integer> obtenerBasicos(Map<Item, Integer> ing) {
+		if (ing == null || ing.isEmpty()) {
+			return new HashMap<Item, Integer>();
+		}
+		Receta aux = new Receta(ing, null);
+		return aux.getRecetasBasicas(1);
 	}
 
 	public Set<Item> getItemsRegistrados() {
