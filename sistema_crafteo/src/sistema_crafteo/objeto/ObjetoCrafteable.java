@@ -37,7 +37,23 @@ public class ObjetoCrafteable extends Item {
 
 	@Override
 	public String getArbolCrafteo() {
-		return "a";
+		StringBuilder sb = new StringBuilder();
+		armarArbol(this, 1, "", sb);
+		return sb.toString();
+	}
+
+	private static void armarArbol(Item item, int cantidad, String indent, StringBuilder sb) {
+        sb.append(indent)
+        .append(cantidad)
+        .append(" ")
+        .append(item.getNombre())
+        .append("\n");
+
+		if (item.esCrafteable()) {
+			for (Map.Entry<Item, Integer> e : item.getIngredientes().entrySet()) {
+				armarArbol(e.getKey(), e.getValue() * cantidad, indent + "  ", sb);
+			}
+		}
 	}
 
 	public List<Receta> getRecetas() {
