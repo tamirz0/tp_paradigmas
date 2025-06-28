@@ -36,7 +36,7 @@ Se busca representar recetas de crafteo, ingredientes básicos, objetos intermed
     - Estado: ***Implementado y testeado, falta agregarlo a cada funcionalidad***
     - Descripcion: Craftear, por su naturaleza, requiere de un tiempo. No es instantáneo, y esos tiempos deben considerarse e informarse en cada una de las preguntas anteriores. Al realizar crafteos en cadena, los tiempos deben sumarse, y multiplicarse apropiadamente de acuerdo a la cantidad de unidades involucradas.
 8. Historial de crafteos
-    - Estado: ***Pendiente***
+    - Estado: ***Implementado***
     - Descripcion: Registrar cada objeto que se ha crafteado, con sus ingredientes usados y la fecha o turno de creación.
 
 ## Datos de origen
