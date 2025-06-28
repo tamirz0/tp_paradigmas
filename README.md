@@ -41,10 +41,10 @@ Se busca representar recetas de crafteo, ingredientes básicos, objetos intermed
 
 ## Datos de origen
 1. recetas.json
-    - Estado: ***Pendiente***
+    - Estado: ***Implementado***
     - Descripcion: Archivo JSON que describa los elementos y los ítems, indicando también los ingredientes que lo forman (si no fueran elementos básicos). Es decir, todo lo necesario para tener la información para operar.
 2. inventario.json
-    - Estado: ***Pendiente***
+    - Estado: ***Implementado***
     - Descripcion: Archivo JSON que especifique los elementos presentes en el inventario inicial del jugador.
 
 ## Integracion Prolog
@@ -98,7 +98,7 @@ puedo_craftear(Objeto) :-
     - Estado: ***En desarrollo***
     - Descripcion: Permitir que un mismo objeto pueda craftearse con diferentes combinaciones de ingredientes (por ejemplo, una antorcha puede hacerse con carbón mineral o carbón vegetal).
 3. Inventario final
-    - Estado: ***Pendiente***
+    - Estado: ***Implementado***
     - Descripcion: Al cerrar el programa, crear un archivo inventario-out.json (o XML), que especifique los elementos presentes en el inventario final del jugador.
 4. Mesas de trabajo
     - Estado: ***En desarrollo***
