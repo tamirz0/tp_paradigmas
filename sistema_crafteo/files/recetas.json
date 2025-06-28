@@ -1,0 +1,32 @@
+{
+  "espada": {
+	  "tipo": "crafteable",
+	  "descripcion": "Espada",
+	  "tiempo": 10,
+	  "recetas": [
+	    {
+	      "ingredientes": { "palo": 2, "piedra": 2 },
+	      "cantidadGenerada": 1
+	    }
+	  ]
+	},
+  "madera": {
+    "tipo": "basico",
+    "descripcion": "Madera"
+  },
+  "piedra": {
+    "tipo": "basico",
+    "descripcion": "Piedra"
+  },
+  "palo": {
+    "tipo": "crafteable",
+    "descripcion": "Palo",
+    "tiempo": 5,
+    "recetas": [
+      {
+        "ingredientes": { "madera": 2 },
+        "cantidadGenerada": 3
+      }
+    ]
+  }
+}
