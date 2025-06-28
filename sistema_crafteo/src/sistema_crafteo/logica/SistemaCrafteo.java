@@ -13,11 +13,11 @@ import sistema_crafteo.objeto.Receta;
 
 public class SistemaCrafteo {
 	private Set<Item> itemsRegistrados;
-	private final List<HistorialCrafteo> historial;
+	private final HistorialCrafteo historial;
 
 	public SistemaCrafteo() {
 		itemsRegistrados = new HashSet<>();
-		historial = new LinkedList<>();
+		historial = new HistorialCrafteo();
 	}
 
 	public boolean registrarItem(Item item) {
@@ -60,7 +60,7 @@ public class SistemaCrafteo {
 
 	public Map<Item, Integer> getIngredientesBasicosFaltantes(Item item, Inventario inventario) {
 		if (!item.esCrafteable()) {
-			return new HashMap<Item, Integer>();
+			return null;
 		}
 
 		Map<Item, Integer> itemsFaltantes = getIngredientesFaltantes(item, inventario);
@@ -108,11 +108,21 @@ public class SistemaCrafteo {
 	}
 
 	public boolean puedeCraftear(Inventario inventario, Item item) {
-		return getIngredientesFaltantes(item, inventario).isEmpty();
+		Map<Item, Integer> resultado = getIngredientesFaltantes(item, inventario);
+		if(resultado == null) {
+			return false;
+		}
+		
+		return resultado.isEmpty();
 	}
 
 	public boolean puedeCraftearBasicos(Inventario inventario, Item item) {
-		return getIngredientesBasicosFaltantes(item, inventario).isEmpty();
+		Map<Item, Integer> resultado = getIngredientesBasicosFaltantes(item, inventario);
+		if(resultado == null) {
+			return false;
+		}
+		
+		return resultado.isEmpty();
 	}
 
 	public int getCantidadMaximaCrafteable(Inventario inventario, Item item) {
@@ -158,8 +168,7 @@ public class SistemaCrafteo {
 			return false;
 		}
 		
-		HistorialCrafteo registro = new HistorialCrafteo();
-		historial.add(registro);
+		historial.registrarCrafteo(item, item.getIngredientes());
 		return true;
 	}
 
@@ -209,7 +218,7 @@ public class SistemaCrafteo {
 		return itemsRegistrados;
 	}
 
-	public List<HistorialCrafteo> getHistorial() {
+	public HistorialCrafteo getHistorial() {
 		return historial;
 	}
 }
