@@ -92,7 +92,7 @@ puedo_craftear(Objeto) :-
 
 ## Funcionalidades extra
 1. Mostrar el árbol de crafteos
-    - Estado: ***Pendiente***
+    - Estado: ***Implementado***
     - Descripcion: Mediante una interfaz de texto, mostrar la forma de realizar un crafteo determinado, informando adecuadamente cada paso necesario.
 2. Recetas alternativas o variantes
     - Estado: ***En desarrollo***
