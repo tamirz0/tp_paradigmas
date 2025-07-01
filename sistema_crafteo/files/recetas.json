@@ -1,33 +1,67 @@
 {
-  "espada": {
-	  "tipo": "crafteable",
-	  "descripcion": "Espada",
-	  "tiempo": 10,
-	  "recetas": [
-	    {
-	      "ingredientes": { "palo": 2, "piedra": 2 },
-	      "cantidadGenerada": 1,
-		  "mesaRequerida": "mesa_espada"
-	    }
-	  ]
+  "hierro": {
+		"tipo": "basico",
+		"descripcion": "hierro"
 	},
-  "madera": {
-    "tipo": "basico",
-    "descripcion": "Madera"
-  },
-  "piedra": {
-    "tipo": "basico",
-    "descripcion": "Piedra"
-  },
-  "palo": {
+  "antorcha": {
     "tipo": "crafteable",
-    "descripcion": "Palo",
-    "tiempo": 5,
+    "descripcion": "Fuente de luz",
+    "tiempo": 6,
     "recetas": [
       {
-        "ingredientes": { "madera": 2 },
-        "cantidadGenerada": 3
+        "ingredientes": { "palo": 1, "carbon": 1 },
+        "cantidadGenerada": 4
+      },
+      {
+        "ingredientes": { "palo": 1, "carbon": 1, "aceite": 1 },
+        "cantidadGenerada": 6,
+        "mesaRequerida": "mesa_alquimia"
       }
     ]
+  },
+  "carbon": {
+  	"tipo": "basico",
+  	"descripcion": "carbon"
+  },
+  "madera": {
+  	"tipo": "basico",
+  	"descripcion": "madera"
+  },
+  "cuero": {
+  	"tipo": "basico",
+  	"descripcion": "cuero"
+  },
+  "escudo": {
+    "tipo": "crafteable",
+    "descripcion": "Protección defensiva",
+    "tiempo": 20,
+    "recetas": [
+      {
+        "ingredientes": { "madera": 4, "cuero": 3 },
+        "cantidadGenerada": 1,
+        "mesaRequerida": "mesa_carbonizo"
+      },
+	  {
+	    "ingredientes": { "madera": 6, "hierro": 2 },
+	    "cantidadGenerada": 1
+	  }
+    ]
+  },
+  "palo": {
+	"tipo": "basico",
+	"descripcion": "palo"
+  },
+
+  "aceite": {
+  	"tipo": "basico",
+  	"descripcion": "aceite"
+  },
+  "piedra": {
+  	"tipo": "basico",
+  	"descripcion": "piedra"
+  },
+  "cristal_magico": {
+  	"tipo": "basico",
+  	"descripcion": "cristal_magico"
   }
 }

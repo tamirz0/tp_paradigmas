@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -104,6 +105,12 @@ public class GestorArchivo {
 			}
 			inventario.setItems(mapa);
 		}
+		
+	    if (data.mesas != null) {
+	        for(String nombreMesa : data.mesas) {
+	        	inventario.agregarMesa(new MesaDeTrabajo(nombreMesa));
+	        }
+	    }
 		return inventario;
 	}
 
@@ -134,5 +141,6 @@ public class GestorArchivo {
 
 	private static class InventarioData {
 		public Map<String, Integer> items;
+		public Set<String> mesas;
 	}
 }

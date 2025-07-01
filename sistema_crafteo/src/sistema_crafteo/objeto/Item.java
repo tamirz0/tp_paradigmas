@@ -79,6 +79,10 @@ public abstract class Item {
 		return null;
 	}
 	
+	public List<Receta> getRecetaTodo(){
+		return null;
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(nombre);

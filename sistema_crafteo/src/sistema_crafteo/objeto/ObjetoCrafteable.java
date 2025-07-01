@@ -149,4 +149,9 @@ public class ObjetoCrafteable extends Item {
 	public Receta getReceta() {
 		return recetas.get(0);
 	}
+	
+	@Override
+	public List<Receta> getRecetaTodo(){
+		return recetas;
+	}
 }

@@ -8,6 +8,12 @@ import java.util.Set;
 import sistema_crafteo.logica.OperacionesMap;
 
 public class Receta {
+	@Override
+	public String toString() {
+		return "Receta [ingredientes=" + ingredientes + ", mesaRequerida=" + mesaRequerida + ", cantidadGenerada="
+				+ cantidadGenerada + "]";
+	}
+
 	private final Map<Item, Integer> ingredientes;
 	private MesaDeTrabajo mesaRequerida;
 	private int cantidadGenerada;
