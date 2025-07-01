@@ -36,6 +36,11 @@ public class MesaDeTrabajo { // Se craftean instantaneamente, solo acepta receta
 	}
 
 	@Override
+	public String toString() {
+		return "Mesa=" + nombre + " ";
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;

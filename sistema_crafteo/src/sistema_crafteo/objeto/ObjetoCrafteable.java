@@ -144,4 +144,9 @@ public class ObjetoCrafteable extends Item {
 	public int getCantidadGenerada() {
 		return this.recetas.get(0).getCantidadGenerada();
 	}
+	
+	@Override
+	public Receta getReceta() {
+		return recetas.get(0);
+	}
 }

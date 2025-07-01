@@ -1,7 +1,9 @@
 package sistema_crafteo.objeto;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import sistema_crafteo.logica.OperacionesMap;
 
@@ -85,6 +87,20 @@ public class Receta {
 		}
 
 		return basicos;
+	}
+	
+	public Set<MesaDeTrabajo> getMesas(){
+		Set<MesaDeTrabajo> ret = new HashSet<>();
+		ret.add(mesaRequerida);
+		for(Map.Entry<Item, Integer> entrada : ingredientes.entrySet()) {
+			Item key = entrada.getKey();
+			Receta recetaKey = key.getReceta();
+			if(recetaKey != null) {
+				ret.addAll(key.getReceta().getMesas());
+			}
+		}
+		ret.remove(null);
+		return ret;
 	}
 
 }

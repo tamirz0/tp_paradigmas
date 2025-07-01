@@ -9,6 +9,7 @@ import java.util.Set;
 
 import sistema_crafteo.inventario.Inventario;
 import sistema_crafteo.objeto.Item;
+import sistema_crafteo.objeto.MesaDeTrabajo;
 import sistema_crafteo.objeto.Receta;
 
 public class SistemaCrafteo {
@@ -113,6 +114,10 @@ public class SistemaCrafteo {
 			return false;
 		}
 		
+		if(!inventario.tieneMesa(item.getReceta().getMesaRequerida())) {
+			return false;
+		}
+		
 		return resultado.isEmpty();
 	}
 
@@ -120,6 +125,14 @@ public class SistemaCrafteo {
 		Map<Item, Integer> resultado = getIngredientesBasicosFaltantes(item, inventario);
 		if(resultado == null) {
 			return false;
+		}
+		
+		Set<MesaDeTrabajo> mesasRequeridas = item.getReceta().getMesas();
+		
+		for (MesaDeTrabajo mesa : mesasRequeridas) {
+			if(!inventario.tieneMesa(mesa)) {
+				return false;
+			}
 		}
 		
 		return resultado.isEmpty();
@@ -135,26 +148,6 @@ public class SistemaCrafteo {
 		Map<Item, Integer> copiaItemsInventario = new HashMap<Item, Integer>();
 		copiaItemsInventario.putAll(inventario.getItems());
 		modificable.setItems(copiaItemsInventario);
-
-		/*
-		 * while (puedeCraftear(modificable, item) || puedeCraftearBasicos(modificable,
-		 * item)) { Map<Item, Integer> objetos = modificable.getItems();
-		 * 
-		 * if (!puedeCraftear(modificable, item)) { Map<Item, Integer> faltantes =
-		 * getIngredientesFaltantes(item, modificable); Map<Item, Integer>
-		 * faltantesABasicos = obtenerBasicos(faltantes);
-		 * 
-		 * for (Map.Entry<Item, Integer> entrada : faltantes.entrySet()) { Item
-		 * ingrediente = entrada.getKey(); Integer cantidadFaltante =
-		 * entrada.getValue(); OperacionesMap.sumarValor(objetos, ingrediente,
-		 * ingrediente.getCantidadGenerada() *
-		 * ingrediente.cantidadCrafteos(cantidadFaltante)); }
-		 * 
-		 * objetos = OperacionesMap.restarTodo(objetos, faltantesABasicos); }
-		 * 
-		 * objetos = OperacionesMap.restarTodo(objetos, item.getIngredientes());
-		 * modificable.setItems(objetos); cantidad++; }
-		 */
 
 		while (ejecutarCrafteo(modificable, item)) {
 			cantidad++;
@@ -193,7 +186,7 @@ public class SistemaCrafteo {
 				OperacionesMap.sumarValor(objetos, ingrediente,
 						ingrediente.getCantidadGenerada() * ingrediente.cantidadCrafteos(cantidadFaltante));
 			}
-
+			
 			objetos = OperacionesMap.restarTodo(objetos, faltantesABasicos);
 		}
 
