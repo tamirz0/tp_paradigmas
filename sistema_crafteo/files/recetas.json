@@ -6,7 +6,8 @@
 	  "recetas": [
 	    {
 	      "ingredientes": { "palo": 2, "piedra": 2 },
-	      "cantidadGenerada": 1
+	      "cantidadGenerada": 1,
+		  "mesaRequerida": "mesa_espada"
 	    }
 	  ]
 	},

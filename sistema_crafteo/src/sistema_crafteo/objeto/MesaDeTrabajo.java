@@ -9,7 +9,13 @@ public class MesaDeTrabajo { // Se craftean instantaneamente, solo acepta receta
 	public String getNombre() {
 		return nombre;
 	}
-
+	public MesaDeTrabajo(String nombre) {
+		if(nombre == null) {
+			throw new IllegalArgumentException("Parametro nulos");
+		}
+		
+		this.nombre = nombre;
+	}
 	public MesaDeTrabajo(String nombre, Receta receta) {
 		if (nombre == null || receta == null) {
 			throw new IllegalArgumentException("Parametros nulos");
@@ -31,7 +37,7 @@ public class MesaDeTrabajo { // Se craftean instantaneamente, solo acepta receta
 
 	@Override
 	public String toString() {
-		return "Mesa=" + nombre + " ";
+		return nombre;
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import sistema_crafteo.inventario.Inventario;
 import sistema_crafteo.logica.HistorialCrafteo;
 import sistema_crafteo.objeto.IngredienteBasico;
 import sistema_crafteo.objeto.Item;
+import sistema_crafteo.objeto.MesaDeTrabajo;
 import sistema_crafteo.objeto.ObjetoCrafteable;
 import sistema_crafteo.objeto.Receta;
 
@@ -72,7 +73,11 @@ public class GestorArchivo {
 							ingredientes.put(ing, e.getValue());
 						}
 					}
-					Receta rec = new Receta(ingredientes, null, rd.cantidadGenerada);
+					MesaDeTrabajo mesa = null;
+					if (rd.mesaRequerida != null) {
+					    mesa = new MesaDeTrabajo(rd.mesaRequerida); // o buscala en un Map si ya la tenés creada
+					}
+					Receta rec = new Receta(ingredientes, mesa, rd.cantidadGenerada);
 					recetas.add(rec);
 				}
 			}
@@ -124,6 +129,7 @@ public class GestorArchivo {
 	private static class RecetaData {
 		public Map<String, Integer> ingredientes;
 		public int cantidadGenerada = 1;
+		public String mesaRequerida;
 	}
 
 	private static class InventarioData {
