@@ -5,14 +5,9 @@ import java.util.Objects;
 public class MesaDeTrabajo { // Se craftean instantaneamente, solo acepta recetaCreacion con ingredientes
 								// basicos. Por un tema de complejidad.
 	private final String nombre;
-	private final Receta recetaCreacion;
 
 	public String getNombre() {
 		return nombre;
-	}
-
-	public Receta getRecetaCreacion() {
-		return recetaCreacion;
 	}
 
 	public MesaDeTrabajo(String nombre, Receta receta) {
@@ -27,7 +22,6 @@ public class MesaDeTrabajo { // Se craftean instantaneamente, solo acepta receta
 		}
 
 		this.nombre = nombre;
-		this.recetaCreacion = receta;
 	}
 
 	@Override

@@ -54,10 +54,10 @@ public class Receta {
 			Integer valor = entrada.getValue();
 			tiempo += key.getTiempoCrafteoTotal(valor);
 		}
-
+		/*
 		if (mesaRequerida != null) {
 			tiempo += mesaRequerida.getRecetaCreacion().getTiempoReceta();
-		}
+		}*/
 
 		return tiempo;
 	}
