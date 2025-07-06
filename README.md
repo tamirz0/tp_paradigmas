@@ -58,35 +58,64 @@ El sistema debe traducir el inventario actual a hechos en Prolog (tengo/2) y def
 
 Ejemplo:
 ```prolog
-% Hechos
+% --------------------
+% Base de conocimientos
+% --------------------
 
-ingrediente(bastón, madera, 2).
-
+ingrediente(baston, madera, 2).
 ingrediente(espada, hierro, 3).
-
-ingrediente(espada, bastón, 1).
+ingrediente(espada, baston, 3).
 
 elemento_basico(madera).
-
 elemento_basico(hierro).
 
+% crafteable(Objeto, CantidadProducida)
+crafteable(baston, 2).
+crafteable(espada, 1).
 
 % Inventario
-
 tengo(madera, 4).
+tengo(hierro, 10).
 
-tengo(hierro, 6).
+% --------------------
+% Reglas de crafteo
+% --------------------
 
-
-% Reglas
-
+% Regla principal: puedo craftear al menos una unidad del objeto
 puedo_craftear(Objeto) :-
+    crafteable(Objeto, _),
+    ingredientes_suficientes(Objeto, 1).
 
-    ingrediente(Objeto, Ing, Cant),
 
-    tengo(Ing, CantDisponible),
+% Verifica si se pueden conseguir los ingredientes para craftear Objeto N veces
+ingredientes_suficientes(Objeto, N) :-
+    findall((Ing, Cant), ingrediente(Objeto, Ing, Cant), Ingredientes),
+    verificar_ingredientes(Ingredientes, N).
 
-    CantDisponible >= Cant.
+% verifica todos los ingredientes
+verificar_ingredientes([], _).
+verificar_ingredientes([(Ing, Cant)|T], Veces) :-
+    CantTotal is Cant * Veces,
+    disponible(Ing, CantTotal),
+    verificar_ingredientes(T, Veces).
+
+% Caso 1: lo tengo directamente
+disponible(Ing, CantNecesaria) :-
+    tengo(Ing, CantTengo),
+    CantTengo >= CantNecesaria.
+
+
+% Caso 2: tengo que hacer N crafteos intermedios
+disponible(Ing, CantNecesaria) :-
+    crafteable(Ing, CantPorCrafteo),
+    Veces is ceiling(CantNecesaria / CantPorCrafteo),
+    puedo_craftear_n_veces(Ing, Veces).
+
+% puedo_craftear_n_veces(Objeto, Veces)
+% Verifica si puedo hacer N crafteos del objeto
+puedo_craftear_n_veces(Objeto, Veces) :-
+    crafteable(Objeto, _),
+    ingredientes_suficientes(Objeto, Veces).
 ```
 
 
