@@ -28,8 +28,20 @@ public abstract class Item {
 	public boolean esCrafteable() {
 		return false; // Por defecto NO es crafteable
 	}
-
+	
 	public String getArbolCrafteo() {
+		return this.nombre; // Por defecto se retorna a si mismo unicamente
+	}
+	
+	public String getArbolCrafteo(int numReceta) {
+		return this.nombre; // Por defecto se retorna a si mismo unicamente
+	}
+	
+	public String getArbolCrafteoBasicos() {
+		return this.nombre; // Por defecto se retorna a si mismo unicamente
+	}
+	
+	public String getArbolCrafteoBasicos(int numReceta) {
 		return this.nombre; // Por defecto se retorna a si mismo unicamente
 	}
 
@@ -42,6 +54,10 @@ public abstract class Item {
 	}
 	
 	public Map<Item, Integer> getIngredientes(){
+		return null;
+	}
+	
+	public Map<Item, Integer> getIngredientes(int numReceta){
 		return null;
 	}
 	
@@ -75,7 +91,20 @@ public abstract class Item {
 		return 0;
 	}
 	
+	public int getCantidadGenerada(int numReceta) {
+		return 0;
+	}
+	
 	public Receta getReceta() {
+		return null;
+	}
+	
+	public List<Receta> getRecetas() {
+		return null;
+	}
+	
+	
+	public Receta getReceta(int numReceta) {
 		return null;
 	}
 	
