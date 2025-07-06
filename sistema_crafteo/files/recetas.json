@@ -9,7 +9,7 @@
     "tiempo": 6,
     "recetas": [
       {
-        "ingredientes": { "palo": 1, "carbon": 1 },
+        "ingredientes": { "palo": 2, "carbon": 1 },
         "cantidadGenerada": 4
       },
       {
@@ -48,8 +48,15 @@
     ]
   },
   "palo": {
-	"tipo": "basico",
-	"descripcion": "palo"
+	"tipo": "crafteable",
+	"descripcion": "palo",
+	"tiempo": 5,
+	"recetas": [
+		{
+			"ingredientes": { "madera": 2 },
+			"cantidadGenerada": 1
+		}
+	]
   },
 
   "aceite": {
