@@ -11,5 +11,10 @@
 	<classpathentry kind="lib" path="lib/jackson-annotations-2.17.0.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-core-2.17.0.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-databind-2.17.0.jar"/>
+	<classpathentry kind="lib" path="lib/jpl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Program Files/swipl/bin"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
