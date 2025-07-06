@@ -9,7 +9,7 @@ import sistema_crafteo.inventario.Inventario;
 import sistema_crafteo.objeto.Item;
 
 public class Prolog {
-	
+
 	public static void consultarInventario() {
 		Query consulta;
 		consulta = new Query("tengo(X, Y)");
@@ -25,10 +25,11 @@ public class Prolog {
 		consulta = new Query("ingrediente(X, Y, Z)");
 		while (consulta.hasMoreSolutions()) {
 			Map<String, Term> solucion = consulta.nextSolution();
-			System.out.println("Ingrediente: " + solucion.get("X") + " -> " + solucion.get("Y") + " " + solucion.get("Z"));
+			System.out.println(
+					"Ingrediente: " + solucion.get("X") + " -> " + solucion.get("Y") + " " + solucion.get("Z"));
 		}
 	}
-	
+
 	public static void consultarItems() {
 		Query consulta;
 
@@ -44,13 +45,13 @@ public class Prolog {
 			System.out.println("Objeto crafteable: " + solucion.get("X") + " " + solucion.get("Y"));
 		}
 	}
-	
+
 	public static boolean cargarInventario(Inventario inventario) {
-		new Query("retractall(tengo(_, _))").hasSolution();  // Reiniciar inventario
+		new Query("retractall(tengo(_, _))").hasSolution(); // Reiniciar inventario
 		for (Map.Entry<Item, Integer> entrada : inventario.getItems().entrySet()) {
 			Item item = entrada.getKey();
 			Integer cantidad = entrada.getValue();
-			
+
 			String nombre = item.getNombre().toLowerCase().trim();
 			String hecho = String.format("assertz(tengo(%s, %d)).", nombre, cantidad);
 			Query query = new Query(hecho);
@@ -60,7 +61,7 @@ public class Prolog {
 		}
 		return true;
 	}
-	
+
 	public static boolean cargarItem(Item item) {
 		if (item.esCrafteable()) {
 			return cargarObjetoCrafteable(item);
@@ -97,9 +98,7 @@ public class Prolog {
 		return Query.hasSolution(hecho);
 	}
 
-
-
-	public static boolean cargarReglas(Item item) {
+	public static void cargarReglas() {
 		StringBuilder reglas = new StringBuilder();
 
         reglas.append("assertz((puedo_craftear(Objeto) :- ")
@@ -142,9 +141,10 @@ public class Prolog {
               .append("crafteable(Objeto, _), ")
               .append("ingredientes_suficientes(Objeto, Veces)))");
         new Query(reglas.toString()).hasSolution();
-		
+	}
+	
+	public static boolean puedoCraftear(Item item) {
 		String nombre = item.getNombre().toLowerCase().trim();
-		
 		Query consulta = new Query(String.format("puedo_craftear(%s)", nombre));
 		return consulta.hasSolution();
 	}

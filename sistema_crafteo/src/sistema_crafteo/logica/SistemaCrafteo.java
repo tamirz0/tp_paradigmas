@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import sistema_crafteo.integracion.GestorArchivo;
+import sistema_crafteo.integracion.Prolog;
 import sistema_crafteo.inventario.Inventario;
 import sistema_crafteo.objeto.Item;
 import sistema_crafteo.objeto.MesaDeTrabajo;
@@ -112,31 +113,31 @@ public class SistemaCrafteo {
 
 	public boolean puedeCraftear(Inventario inventario, Item item) {
 		Map<Item, Integer> resultado = getIngredientesFaltantes(item, inventario);
-		if(resultado == null) {
+		if (resultado == null) {
 			return false;
 		}
-		
-		if(!inventario.tieneMesa(item.getReceta().getMesaRequerida())) {
+
+		if (!inventario.tieneMesa(item.getReceta().getMesaRequerida())) {
 			return false;
 		}
-		
+
 		return resultado.isEmpty();
 	}
 
 	public boolean puedeCraftearBasicos(Inventario inventario, Item item) {
 		Map<Item, Integer> resultado = getIngredientesBasicosFaltantes(item, inventario);
-		if(resultado == null) {
+		if (resultado == null) {
 			return false;
 		}
-		
+
 		Set<MesaDeTrabajo> mesasRequeridas = item.getReceta().getMesas();
-		
+
 		for (MesaDeTrabajo mesa : mesasRequeridas) {
-			if(!inventario.tieneMesa(mesa)) {
+			if (!inventario.tieneMesa(mesa)) {
 				return false;
 			}
 		}
-		
+
 		return resultado.isEmpty();
 	}
 
@@ -159,10 +160,10 @@ public class SistemaCrafteo {
 	}
 
 	public boolean craftear(Inventario inventario, Item item) {
-		if(!ejecutarCrafteo(inventario, item)) {
+		if (!ejecutarCrafteo(inventario, item)) {
 			return false;
 		}
-		
+
 		historial.registrarCrafteo(item, item.getIngredientes());
 		return true;
 	}
@@ -188,7 +189,7 @@ public class SistemaCrafteo {
 				OperacionesMap.sumarValor(objetos, ingrediente,
 						ingrediente.getCantidadGenerada() * ingrediente.cantidadCrafteos(cantidadFaltante));
 			}
-			
+
 			objetos = OperacionesMap.restarTodo(objetos, faltantesABasicos);
 		}
 
@@ -196,8 +197,7 @@ public class SistemaCrafteo {
 		OperacionesMap.sumarValor(objetos, item, item.getCantidadGenerada());
 		objetos = OperacionesMap.quitarKeysConValorCero(objetos);
 		inventario.setItems(objetos);
-		
-		
+
 		return true;
 	}
 
@@ -223,7 +223,19 @@ public class SistemaCrafteo {
 		}
 		return inventario;
 	}
-	
+
+	public void cargarProlog() {
+		for (Item item : itemsRegistrados) {
+			Prolog.cargarItem(item);
+		}
+		Prolog.cargarReglas();
+	}
+
+	public boolean puedeCraftearProlog(Inventario inventario, Item item) {
+		Prolog.cargarInventario(inventario);
+		return Prolog.puedoCraftear(item);
+	}
+
 	public Set<Item> getItemsRegistrados() {
 		return itemsRegistrados;
 	}
@@ -231,71 +243,69 @@ public class SistemaCrafteo {
 	public HistorialCrafteo getHistorial() {
 		return historial;
 	}
-	
+
 	public Item buscarItem(String nombre) {
 		for (Item item : itemsRegistrados) {
-			if(item.getNombre().equalsIgnoreCase(nombre)) {
+			if (item.getNombre().equalsIgnoreCase(nombre)) {
 				return item;
 			}
 		}
 		return null;
 	}
-	
+
 	public static void mostrarFuncionamiento() {
 		try {
-            // 1. Rutas a archivos JSON
-            String recetasJson = "files/recetas.json";         // Ajustar ruta si es necesario
-            String inventarioJson = "files/inventario.json";   // Ajustar ruta si es necesario
+			// 1. Rutas a archivos JSON
+			String recetasJson = "files/recetas.json"; // Ajustar ruta si es necesario
+			String inventarioJson = "files/inventario.json"; // Ajustar ruta si es necesario
 
-            // 2. Cargar items definidos en recetas
-            GestorArchivo gestor = new GestorArchivo(
-                Paths.get(inventarioJson),
-                Paths.get(recetasJson)
-            );
-            Map<String, Item> items = gestor.cargarItems();
-            System.out.println("Items cargados: " + items.keySet());
-            
-            // 3. Crear e inicializar inventario
-            Inventario inventario = gestor.cargarInventario(items);
-            System.out.println("Inventario inicial: " + inventario.getItems());
+			// 2. Cargar items definidos en recetas
+			GestorArchivo gestor = new GestorArchivo(Paths.get(inventarioJson), Paths.get(recetasJson));
+			Map<String, Item> items = gestor.cargarItems();
+			System.out.println("Items cargados: " + items.keySet());
 
-            // 4. Registrar items en el sistema
-            SistemaCrafteo sistema = new SistemaCrafteo();
-            for (Item item : items.values()) {
-                sistema.registrarItem(item);
-            }
+			// 3. Crear e inicializar inventario
+			Inventario inventario = gestor.cargarInventario(items);
+			System.out.println("Inventario inicial: " + inventario.getItems());
 
-            // 5. Ejemplo de crafteo
-            //Primero hago la mesa si no la tengo (en este caso ya la tengo)
-            //MesaDeTrabajo mesaEscudo = items.get("escudo").getReceta().getMesaRequerida();
-            //inventario.agregarMesa(mesaEscudo);
-            
-            String nombreObjetivo = "escudo";  				// Cambiar por el item a craftear
-            Item objetivo = items.get(nombreObjetivo);
-            if (objetivo == null) {
-                System.err.println("Item no encontrado: " + nombreObjetivo);
-                return;
-            }
-            
-            System.out.println("Ingredientes " + nombreObjetivo + " " + objetivo.getIngredientes().toString() + "\n");
-            System.out.println(objetivo.getArbolCrafteo());
-            boolean exito = sistema.craftear(inventario, objetivo);
-            if (exito) {
-                System.out.println("Crafteado exitosamente: " + nombreObjetivo);
-            } else {
-                System.out.println("No se pudo craftear: " + nombreObjetivo);
-            }
+			// 4. Registrar items en el sistema
+			SistemaCrafteo sistema = new SistemaCrafteo();
+			for (Item item : items.values()) {
+				sistema.registrarItem(item);
+			}
 
-            // 6. Mostrar estado final
-            System.out.println("Inventario final: " + inventario.getItems());
-            HistorialCrafteo historial = sistema.getHistorial();
-            System.out.println("\nHistorial de crafteos: \n" + historial.getRegistros());
-            
-            gestor.guardarInventario(Paths.get("files/inventario-out.json"), inventario);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+			// 5. Ejemplo de crafteo
+			// Primero hago la mesa si no la tengo (en este caso ya la tengo)
+			// MesaDeTrabajo mesaEscudo =
+			// items.get("escudo").getReceta().getMesaRequerida();
+			// inventario.agregarMesa(mesaEscudo);
+
+			String nombreObjetivo = "escudo"; // Cambiar por el item a craftear
+			Item objetivo = items.get(nombreObjetivo);
+			if (objetivo == null) {
+				System.err.println("Item no encontrado: " + nombreObjetivo);
+				return;
+			}
+
+			System.out.println("Ingredientes " + nombreObjetivo + " " + objetivo.getIngredientes().toString() + "\n");
+			System.out.println(objetivo.getArbolCrafteo());
+			boolean exito = sistema.craftear(inventario, objetivo);
+			if (exito) {
+				System.out.println("Crafteado exitosamente: " + nombreObjetivo);
+			} else {
+				System.out.println("No se pudo craftear: " + nombreObjetivo);
+			}
+
+			// 6. Mostrar estado final
+			System.out.println("Inventario final: " + inventario.getItems());
+			HistorialCrafteo historial = sistema.getHistorial();
+			System.out.println("\nHistorial de crafteos: \n" + historial.getRegistros());
+
+			gestor.guardarInventario(Paths.get("files/inventario-out.json"), inventario);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 }
