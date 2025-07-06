@@ -232,6 +232,15 @@ public class SistemaCrafteo {
 		return historial;
 	}
 	
+	public Item buscarItem(String nombre) {
+		for (Item item : itemsRegistrados) {
+			if(item.getNombre().equalsIgnoreCase(nombre)) {
+				return item;
+			}
+		}
+		return null;
+	}
+	
 	public static void mostrarFuncionamiento() {
 		try {
             // 1. Rutas a archivos JSON
