@@ -209,6 +209,21 @@ public class SistemaCrafteo {
 		return aux.getRecetasBasicas(1);
 	}
 
+	public Inventario cargarDatos(String pathRecetas, String pathInventario) {
+		GestorArchivo gestor = new GestorArchivo(Paths.get(pathInventario), Paths.get(pathRecetas));
+		Inventario inventario = null;
+		try {
+			Map<String, Item> items = gestor.cargarItems();
+			for (Item item : items.values()) {
+				registrarItem(item);
+			}
+			inventario = gestor.cargarInventario(items);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return inventario;
+	}
+	
 	public Set<Item> getItemsRegistrados() {
 		return itemsRegistrados;
 	}
