@@ -1,9 +1,10 @@
 {
   "items": {
-    "madera": 4,
-	"cuero": 4,
-	"piedra": 15,
-	"carbon": 20
+    "madera": 6,
+	"cuero": 20,
+	"piedra": 10,
+	"hierro": 2,
+	"astilla": 10
   },
-  "mesas": ["mesa_carbonizo"]
+  "mesas": ["mesa_carbonizo", "mesa_cuerina"]
 }

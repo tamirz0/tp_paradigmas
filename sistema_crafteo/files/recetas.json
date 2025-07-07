@@ -23,6 +23,10 @@
   	"tipo": "basico",
   	"descripcion": "carbon"
   },
+  "astilla": {
+  	"tipo": "basico",
+  	"descripcion": "astilla"
+  },
   "madera": {
   	"tipo": "basico",
   	"descripcion": "madera"
@@ -37,15 +41,54 @@
     "tiempo": 20,
     "recetas": [
       {
-        "ingredientes": { "madera": 4, "cuero": 3 },
+        "ingredientes": { "madera": 40, "cuero": 30 },
         "cantidadGenerada": 1,
         "mesaRequerida": "mesa_carbonizo"
       },
 	  {
 	    "ingredientes": { "madera": 6, "hierro": 2 },
-	    "cantidadGenerada": 1
+	    "cantidadGenerada": 15
+	  },
+	  {
+	    "ingredientes": { "madera": 4, "cuero mejorado": 5, "piedra": 1},
+	    "cantidadGenerada": 10
 	  }
     ]
+  },
+  "cuero mejorado": {
+  "tipo": "crafteable",
+  "descripcion": "cuero reforzado",
+  "tiempo": 5,
+  "recetas": [
+		{
+		"ingredientes": { "cuero": 300, "piedra premium": 4, "palo": 2},
+		"cantidadGenerada": 2
+		},  		
+		{
+  		"ingredientes": { "cuero": 6, "piedra": 1},
+  		"cantidadGenerada": 2,
+		"mesaRequerida": "mesa_cuerina"
+  		},
+		{
+		"ingredientes": { "cuero": 100, "hierro": 2},
+		"cantidadGenerada": 5
+		}		
+  	]
+  },
+  "piedra premium": {
+  "tipo": "crafteable",
+  "descripcion": "piedra pero mejor",
+  "tiempo": 5,
+  "recetas": [
+  		{
+  		"ingredientes": { "piedra": 30, "madera": 85},
+  		"cantidadGenerada": 4
+  		},
+	  	{
+	  	"ingredientes": { "piedra": 3, "hierro": 4},
+	  	"cantidadGenerada": 3
+	  	}
+  	]
   },
   "palo": {
 	"tipo": "crafteable",
@@ -53,8 +96,12 @@
 	"tiempo": 5,
 	"recetas": [
 		{
-			"ingredientes": { "madera": 2 },
+			"ingredientes": { "madera": 20 },
 			"cantidadGenerada": 1
+		},
+		{
+			"ingredientes": { "madera": 1 , "astilla": 5},
+			"cantidadGenerada": 2
 		}
 	]
   },
