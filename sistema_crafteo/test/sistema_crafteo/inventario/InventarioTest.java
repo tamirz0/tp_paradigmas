@@ -6,6 +6,10 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -86,7 +90,7 @@ class InventarioTest {
 		inventario.recolectarItem(itemRecolectable, 5);
 
 		int esperado = 10;
-		int actual = inventario.getCantidad(itemRecolectable);
+		int actual = inventario.getItems().getOrDefault(itemRecolectable, 0);
 		assertEquals(esperado, actual);
 	}
 
@@ -116,57 +120,6 @@ class InventarioTest {
 		assertEquals("Cantidad recolectada menor/igual a cero", e.getMessage());
 	}
 
-	@Test
-	void removerItem_cantidadMenorALaActual_restaCorrectamente() {
-		Recolectable itemRecolectable = new Recolectable("Prueba", "");
-		inventario.recolectarItem(itemRecolectable, 10);
-		inventario.removerItem(itemRecolectable, 5);
-
-		int esperado = 5;
-		int actual = inventario.getCantidad(itemRecolectable);
-		assertEquals(esperado, actual);
-	}
-
-	@Test
-	void removerItem_cantidadIgualALaActual_eliminaItem() {
-		Recolectable itemRecolectable = new Recolectable("Prueba", "");
-		inventario.recolectarItem(itemRecolectable, 10);
-		inventario.removerItem(itemRecolectable, 10);
-
-		boolean actual = inventario.getItems().containsKey(itemRecolectable);
-		assertFalse(actual);
-	}
-
-	@Test
-	void removerItem_cantidadNegativa_lanzaExcepcion() {
-		Recolectable itemRecolectable = new Recolectable("Prueba", "");
-
-		assertThrows(IllegalArgumentException.class, () -> {
-			inventario.removerItem(itemRecolectable, -1);
-		});
-	}
-	
-	@Test
-	void removerItem_cantidadMayorALaActual_lanzaExcepcion() {
-		Recolectable itemRecolectable = new Recolectable("Prueba", "");
-		inventario.recolectarItem(itemRecolectable, 5);
-		assertThrows(IllegalArgumentException.class, () -> {
-			inventario.removerItem(itemRecolectable, 10);
-		});
-	}
-	
-	@Test
-	void removerItem_itemNoExiste_lanzaExcepcion() {
-		Recolectable itemRecolectable = new Recolectable("Prueba", "");
-		assertThrows(IllegalArgumentException.class, () -> {
-			inventario.removerItem(itemRecolectable, 1);
-		});
-	}
-	
-	@Test
-	void getCantidad_itemNoExiste_retornaCero() {
-		assertEquals(0, inventario.getCantidad(null));
-	}
 	
 	@Test
 	void agregarMesa_mesaValida_agregaCorrectamente() {
@@ -175,5 +128,53 @@ class InventarioTest {
 		assertTrue(inventario.tieneMesa(mesa));
 		assertFalse(inventario.agregarMesa(mesa));
 	}
+	
+    @Test
+    void tieneMesa_sinAgregar_retornaFalse() {
+        MesaDeTrabajo mesa = new MesaDeTrabajo("mesaX");
+        assertFalse(inventario.tieneMesa(mesa));
+    }
 
+    @Test
+    void getMesas_inicialmente_vacio() {
+        Set<MesaDeTrabajo> mesas = inventario.getMesas();
+        assertTrue(mesas.isEmpty());
+    }
+    
+    @Test
+    void agregarMesa_multiplesMesas_seRegistranCorrectamente() {
+        MesaDeTrabajo m1 = new MesaDeTrabajo("M1");
+        MesaDeTrabajo m2 = new MesaDeTrabajo("M2");
+        assertTrue(inventario.agregarMesa(m1));
+        assertTrue(inventario.agregarMesa(m2));
+        assertTrue(inventario.tieneMesa(m1));
+        assertTrue(inventario.tieneMesa(m2));
+        assertEquals(2, inventario.getMesas().size());
+    }
+    
+    @Test
+    void setItems_mapaValido_reemplazaContenido() {
+    	Recolectable a = new Recolectable("A", "");
+    	Recolectable b = new Recolectable("B", "");
+        Map<Item,Integer> nuevo = new HashMap<>();
+        nuevo.put(a, 3);
+        nuevo.put(b, 5);
+        inventario.setItems(nuevo);
+        // getItems debe devolver exactamente 'nuevo'
+        assertEquals(2, inventario.getItems().size());
+        assertTrue(inventario.getItems().containsKey(a));
+        assertTrue(inventario.getItems().containsKey(b));
+        assertEquals(3, (int)inventario.getItems().get(a));
+        assertEquals(5, (int)inventario.getItems().get(b));
+    }
+    
+    @Test
+    void getItems_modificarMapaExterno_afectaInventario() {
+    	Recolectable x = new Recolectable("X", "");
+        inventario.recolectarItem(x, 2);
+        Map<Item,Integer> ref = inventario.getItems();
+        ref.put(x, 10);
+        // como getItems devuelve la referencia interna, el cambio debe verse
+        assertEquals(10, (int)inventario.getItems().get(x));
+    }
 }

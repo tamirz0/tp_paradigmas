@@ -33,17 +33,6 @@ public class Inventario {
 		OperacionesMap.sumarValor(items, item, cantidad);
 	}
 
-	public void removerItem(Item item, int cantidad) {
-		if (cantidad <= 0) {
-			throw new IllegalArgumentException("Cantidad a remover menor/igual a cero");
-		}
-		OperacionesMap.restarValor(items, item, cantidad);
-	}
-
-	public int getCantidad(Item item) {
-		return items.getOrDefault(item, 0);
-	}
-
 	public boolean agregarMesa(MesaDeTrabajo mesa) {
 		return mesas.add(mesa);
 	}
