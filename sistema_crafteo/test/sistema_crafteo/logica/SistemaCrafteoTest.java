@@ -237,7 +237,7 @@ class SistemaCrafteoTest {
 			miInventario.setItems(itemsMiInventario);
 
 			
-			sistema.craftear(miInventario, espada);
+			sistema.craftear(miInventario, espada, 0);
 			Map<Item, Integer> esperado = new HashMap<Item, Integer>();
 			esperado.put(espada, 1);
 			
@@ -266,7 +266,7 @@ class SistemaCrafteoTest {
 
 			miInventario.setItems(itemsMiInventario);
 			
-			sistema.craftear(miInventario, espada);
+			sistema.craftear(miInventario, espada, 0);
 			Map<Item, Integer> actual = miInventario.getItems();
 			Map<Item, Integer> esperado = new HashMap<Item, Integer>();
 			esperado.put(madera, 3);
