@@ -223,32 +223,26 @@ public class SistemaCrafteo {
 		return inventario;
 	}
 
+	/**
+	 * Verifica si se puede craftear un item usando la lógica de Prolog.
+	 * Las reglas se cargan en el constructor, solo se recarga el inventario.
+	 */
 	public boolean puedeCraftearProlog(Inventario inventario, Item item) {
 		if (!item.esCrafteable()) {
 			return false;
 		}
 
-		Prolog.cargarInventario(inventario);
-
-		for (int i = 0; i < item.getRecetas().size(); i++) {
-			Prolog.cargarObjetoCrafteable(item, i);
-			if (Prolog.puedoCraftear(item)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	public boolean puedeCraftearProlog(Inventario inventario, Item item, int nroReceta) {
-		if (!item.esCrafteable()) {
-			return false;
-		}
 		Prolog.limpiarBaseObjetos();
 		Prolog.cargarInventario(inventario);
-		Prolog.cargarObjetoCrafteable(item, nroReceta);
+		
+		for (Item itemRegistrado : itemsRegistrados) {
+			Prolog.cargarItem(itemRegistrado);
+		}
+		
 		return Prolog.puedoCraftear(item);
 	}
+
+
 
 	public Set<Item> getItemsRegistrados() {
 		return itemsRegistrados;
@@ -308,7 +302,7 @@ public class SistemaCrafteo {
 			System.out.println(
 					"Ingredientes (receta 3) " + nombreObjetivo + " " + objetivo.getIngredientes(2).toString() + "\n");
 
-			if (sistema.puedeCraftearConReceta(inventario, objetivo, 2))
+			if (sistema.puedeCraftearProlog(inventario, objetivo))
 				System.out.println("Se puede craftear escudo.");
 			else
 				System.out.println("No se puede craftear escudo.");
@@ -356,18 +350,6 @@ public class SistemaCrafteo {
 	}
 
 	/////////////////////////////////////////////////////
-
-	public boolean puedeCraftearConReceta(Inventario inv, Item item, int numRecetaNivel1) {
-		if (!item.esCrafteable())
-			return false;
-
-		Receta rec = item.getReceta(numRecetaNivel1);
-		if (rec.getMesaRequerida() != null && !inv.tieneMesa(rec.getMesaRequerida())) {
-			return false;
-		}
-
-		return puedeCraftearProlog(inv, item, numRecetaNivel1);
-	}
 
 	private Receta elegirSubRecetaViable(Item item, int qty, Map<Item, Integer> simInv, Inventario invReal) {
 		for (Receta cand : item.getRecetas()) {
@@ -574,7 +556,7 @@ public class SistemaCrafteo {
 			throw new IllegalArgumentException("Índice de receta inválido");
 		}
 
-		if (!puedeCraftearConReceta(inv, item, recetaIndex1)) {
+		if (!puedeCraftearProlog(inv, item)) {
 			return false;
 		}
 
