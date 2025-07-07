@@ -8,16 +8,10 @@ import java.util.Set;
 import sistema_crafteo.logica.OperacionesMap;
 
 public class Receta {
-	@Override
-	public String toString() {
-		return "Receta [ingredientes=" + ingredientes + ", mesaRequerida=" + mesaRequerida + ", cantidadGenerada="
-				+ cantidadGenerada + "]";
-	}
-
 	private final Map<Item, Integer> ingredientes;
 	private MesaDeTrabajo mesaRequerida;
 	private int cantidadGenerada;
-
+	
 	public Receta() {
 		ingredientes = new HashMap<Item, Integer>();
 		mesaRequerida = null;
@@ -44,6 +38,12 @@ public class Receta {
 		}
 
 		this.cantidadGenerada = cantidadGenerada;
+	}
+	
+	@Override
+	public String toString() {
+		return "Receta [ingredientes=" + ingredientes + ", mesaRequerida=" + mesaRequerida + ", cantidadGenerada="
+				+ cantidadGenerada + "]";
 	}
 
 	/*
