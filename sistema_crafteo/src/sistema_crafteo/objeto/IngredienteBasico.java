@@ -20,6 +20,4 @@ public class IngredienteBasico extends Item {
 	public String toString() {
 		return "Basico " + nombre;
 	}
-	
-	
 }
