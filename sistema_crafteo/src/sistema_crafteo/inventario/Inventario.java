@@ -51,7 +51,11 @@ public class Inventario {
 	public boolean tieneMesa(MesaDeTrabajo mesa) {
 		return mesas.contains(mesa);
 	}
-
+	
+	public Set<MesaDeTrabajo> getMesas() {
+		return mesas;
+	}
+	
 	public Map<Item, Integer> getItems() {
 		return this.items;
 	}
