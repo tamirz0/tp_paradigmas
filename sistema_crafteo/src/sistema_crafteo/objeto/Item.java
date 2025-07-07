@@ -20,13 +20,10 @@ public abstract class Item {
 
 	public abstract int getTiempoCrafteo();
 	public abstract int getTiempoCrafteoTotal();
-	
-	public int getTiempoCrafteoTotal(int n) {
-		return 0;
-	}
+	public abstract int getTiempoCrafteoTotal(int n);
 
 	public boolean esCrafteable() {
-		return false; // Por defecto NO es crafteable
+		return false; 		// Por defecto NO es crafteable
 	}
 	
 	public String getArbolCrafteo() {

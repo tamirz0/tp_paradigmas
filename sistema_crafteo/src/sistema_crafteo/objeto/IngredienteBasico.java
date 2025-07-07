@@ -17,6 +17,11 @@ public class IngredienteBasico extends Item {
 	}
 
 	@Override
+	public int getTiempoCrafteoTotal(int n) {
+		return 0;
+	}
+	
+	@Override
 	public String toString() {
 		return "Basico " + nombre;
 	}

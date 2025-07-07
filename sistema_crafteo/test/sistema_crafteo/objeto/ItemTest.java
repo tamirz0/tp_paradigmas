@@ -9,29 +9,11 @@ import org.junit.jupiter.api.Test;
 
 class ItemTest {
 
-	class ItemPrueba extends Item {
-		public ItemPrueba(String nombre, String descripcion) {
-			super(nombre, descripcion);
-		}
-
-		@Override
-		public int getTiempoCrafteo() {
-			return 0;
-		}
-
-		@Override
-		public int getTiempoCrafteoTotal() {
-			return 1;
-		}
-
-
-	}
-
-	ItemPrueba item;
+	IngredienteBasico item;
 
 	@BeforeEach
 	void setUp() {
-		item = new ItemPrueba("ItemTest", "Descripcion");
+		item = new IngredienteBasico("ItemTest", "Descripcion");
 	}
 
 	@Test
@@ -46,7 +28,7 @@ class ItemTest {
 	void crearItem_itemInvalido_lanzaExcepcion() {
 		Exception e = assertThrows(IllegalArgumentException.class, () ->{
 		
-			item = new ItemPrueba(null, null);
+			item = new IngredienteBasico(null, null);
 		
 		});
 		assertEquals("Parametro nulo", e.getMessage());
@@ -61,7 +43,7 @@ class ItemTest {
 	
 	@Test
 	void getTiempoCrafteoTotal_itemValido_retornaValorCorrecto() {
-		int esperado = 1;
+		int esperado = 0;
 		int actual = item.getTiempoCrafteoTotal();
 		assertEquals(esperado, actual);
 	}
@@ -74,7 +56,7 @@ class ItemTest {
 	@Test
 	void getArbolCrafteo_default_retornaNombre() {
 		String esperado = item.getNombre();
-		String actual = item.getArbolCrafteo();
+		String actual = item.getArbolCrafteoBasicos();
 		assertEquals(esperado, actual);
 	}
 	

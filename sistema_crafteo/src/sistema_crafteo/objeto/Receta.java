@@ -9,7 +9,7 @@ import sistema_crafteo.logica.OperacionesMap;
 
 public class Receta {
 	private final Map<Item, Integer> ingredientes;
-	private MesaDeTrabajo mesaRequerida;
+	private final MesaDeTrabajo mesaRequerida;
 	private int cantidadGenerada;
 	
 	public Receta() {
@@ -19,40 +19,25 @@ public class Receta {
 	}
 
 	public Receta(Map<Item, Integer> ingredientes, MesaDeTrabajo mesaRequerida) {
+		this(ingredientes, mesaRequerida, 1);
+	}
+
+	public Receta(Map<Item, Integer> ingredientes, MesaDeTrabajo mesaRequerida, int cantidadGenerada) {
 		if (ingredientes == null) {
 			throw new IllegalArgumentException("Parametro nulo");
 		}
 		if (ingredientes.isEmpty()) {
 			throw new IllegalArgumentException("Sin ingredientes");
 		}
-
-		this.cantidadGenerada = 1;
-		this.ingredientes = ingredientes;
-		this.mesaRequerida = mesaRequerida;
-	}
-
-	public Receta(Map<Item, Integer> ingredientes, MesaDeTrabajo mesaRequerida, int cantidadGenerada) {
-		this(ingredientes, mesaRequerida);
 		if (cantidadGenerada <= 0) {
 			throw new IllegalArgumentException("Cantidad generada menor o igual a cero");
 		}
 
 		this.cantidadGenerada = cantidadGenerada;
+		this.ingredientes = ingredientes;
+		this.mesaRequerida = mesaRequerida;
 	}
 	
-	@Override
-	public String toString() {
-		return "Receta [ingredientes=" + ingredientes + ", mesaRequerida=" + mesaRequerida + ", cantidadGenerada="
-				+ cantidadGenerada + "]";
-	}
-
-	/*
-	 * Util para cuando implementemos JSON public Receta(int cantidadProducida,
-	 * MesaDeTrabajo mesaRequerida, Map<String, Integer> ingredientes) {
-	 * 
-	 * }
-	 */
-
 	public int getTiempoReceta() {
 		int tiempo = 0;
 		for (Map.Entry<Item, Integer> entrada : ingredientes.entrySet()) {
@@ -60,10 +45,6 @@ public class Receta {
 			Integer valor = entrada.getValue();
 			tiempo += key.getTiempoCrafteoTotal(valor);
 		}
-		/*
-		if (mesaRequerida != null) {
-			tiempo += mesaRequerida.getRecetaCreacion().getTiempoReceta();
-		}*/
 
 		return tiempo;
 	}
