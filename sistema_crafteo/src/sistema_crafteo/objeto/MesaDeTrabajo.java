@@ -2,8 +2,7 @@ package sistema_crafteo.objeto;
 
 import java.util.Objects;
 
-public class MesaDeTrabajo { // Se craftean instantaneamente, solo acepta recetaCreacion con ingredientes
-								// basicos. Por un tema de complejidad.
+public class MesaDeTrabajo { 
 	private final String nombre;
 
 	public String getNombre() {
@@ -14,19 +13,6 @@ public class MesaDeTrabajo { // Se craftean instantaneamente, solo acepta receta
 			throw new IllegalArgumentException("Parametro nulos");
 		}
 		
-		this.nombre = nombre;
-	}
-	public MesaDeTrabajo(String nombre, Receta receta) {
-		if (nombre == null || receta == null) {
-			throw new IllegalArgumentException("Parametros nulos");
-		}
-
-		for (Item item : receta.getIngredientes().keySet()) {
-			if (item.esCrafteable()) {
-				throw new IllegalArgumentException("Mesa de trabajo solo puede ser creada con ingredientes basicos");
-			}
-		}
-
 		this.nombre = nombre;
 	}
 

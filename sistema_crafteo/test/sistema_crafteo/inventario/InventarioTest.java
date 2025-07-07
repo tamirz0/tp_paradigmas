@@ -13,55 +13,12 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import sistema_crafteo.objeto.IngredienteBasico;
 import sistema_crafteo.objeto.Item;
 import sistema_crafteo.objeto.MesaDeTrabajo;
-import sistema_crafteo.objeto.Receta;
+import sistema_crafteo.objeto.ObjetoCrafteable;
 
 class InventarioTest {
-
-	class Recolectable extends Item {
-
-		public Recolectable(String nombre, String descripcion) {
-			super(nombre, descripcion);
-		}
-
-		@Override
-		public int getTiempoCrafteo() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-		@Override
-		public int getTiempoCrafteoTotal() {
-			// TODO Auto-generated method stub
-			return 0;
-		}
-
-	}
-
-	class Crafteable extends Item {
-
-		public Crafteable(String nombre, String descripcion) {
-			super(nombre, descripcion);
-		}
-
-		@Override
-		public int getTiempoCrafteo() {
-			return 0;
-		}
-
-		@Override
-		public int getTiempoCrafteoTotal() {
-			return 0;
-		}
-
-		@Override
-		public boolean esCrafteable() {
-			return true;
-		}
-
-	}
-
 	Inventario inventario;
 
 	@BeforeEach
@@ -76,7 +33,7 @@ class InventarioTest {
 
 	@Test
 	void recolectarItem_itemNoCrafteableNuevo_agregaCorrectamente() {
-		Recolectable itemRecolectable = new Recolectable("prueba", "");
+		IngredienteBasico itemRecolectable = new IngredienteBasico("prueba", "p1");
 		assertFalse(inventario.getItems().containsKey(itemRecolectable));
 		inventario.recolectarItem(itemRecolectable, 1);
 		assertTrue(inventario.getItems().containsKey(itemRecolectable));
@@ -84,7 +41,7 @@ class InventarioTest {
 
 	@Test
 	void recolectarItem_itemNoCrafteableExistente_agregaCorrectamente() {
-		Recolectable itemRecolectable = new Recolectable("prueba", " ");
+		IngredienteBasico itemRecolectable = new IngredienteBasico("prueba", "p1");
 		inventario.recolectarItem(itemRecolectable, 5);
 
 		inventario.recolectarItem(itemRecolectable, 5);
@@ -96,7 +53,7 @@ class InventarioTest {
 
 	@Test
 	void recolectarItem_itemCrafteable_lanzaExcepcion() {
-		Crafteable itemCrafteable = new Crafteable("prueba", "");
+		ObjetoCrafteable itemCrafteable = new ObjetoCrafteable("prueba", "p2",1);
 		Exception e = assertThrows(IllegalArgumentException.class, () -> {
 			inventario.recolectarItem(itemCrafteable, 2);
 		});
@@ -113,7 +70,7 @@ class InventarioTest {
 
 	@Test
 	void recolectarItem_cantidadNegativa_lanzaExcepcion() {
-		Recolectable itemRecolectable = new Recolectable("prueba", "");
+		IngredienteBasico itemRecolectable = new IngredienteBasico("prueba", "p1");
 		Exception e = assertThrows(IllegalArgumentException.class, () -> {
 			inventario.recolectarItem(itemRecolectable, -1);
 		});
@@ -123,7 +80,7 @@ class InventarioTest {
 	
 	@Test
 	void agregarMesa_mesaValida_agregaCorrectamente() {
-		MesaDeTrabajo mesa = new MesaDeTrabajo("Mesa", new Receta());
+		MesaDeTrabajo mesa = new MesaDeTrabajo("Mesa");
 		inventario.agregarMesa(mesa);
 		assertTrue(inventario.tieneMesa(mesa));
 		assertFalse(inventario.agregarMesa(mesa));
@@ -154,8 +111,8 @@ class InventarioTest {
     
     @Test
     void setItems_mapaValido_reemplazaContenido() {
-    	Recolectable a = new Recolectable("A", "");
-    	Recolectable b = new Recolectable("B", "");
+    	IngredienteBasico a = new IngredienteBasico("A", "a1");
+    	IngredienteBasico b = new IngredienteBasico("B", "b2");
         Map<Item,Integer> nuevo = new HashMap<>();
         nuevo.put(a, 3);
         nuevo.put(b, 5);
@@ -170,7 +127,7 @@ class InventarioTest {
     
     @Test
     void getItems_modificarMapaExterno_afectaInventario() {
-    	Recolectable x = new Recolectable("X", "");
+    	IngredienteBasico x = new IngredienteBasico("X", "x1");
         inventario.recolectarItem(x, 2);
         Map<Item,Integer> ref = inventario.getItems();
         ref.put(x, 10);
