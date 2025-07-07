@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -122,7 +123,20 @@ public class GestorArchivo {
 
 	/** Escribe el inventario actual en formato JSON. */
 	public void guardarInventario(Path destino, Inventario inventario) throws IOException {
-		mapper.writeValue(destino.toFile(), inventario);
+	    // Reconstruimos un InventarioData para que jackson lo serialice igual
+	    InventarioData salida = new InventarioData();
+	    salida.items = new HashMap<>();
+	    // Convertimos Map<Item,Integer> a Map<String,Integer> usando getNombre()
+	    for (Map.Entry<Item,Integer> e : inventario.getItems().entrySet()) {
+	        salida.items.put(e.getKey().getNombre(), e.getValue());
+	    }
+	    // Mesas igual, de Objeto a String
+	    salida.mesas = new HashSet<>();
+	    for (MesaDeTrabajo mesa : inventario.getMesas()) {
+	        salida.mesas.add(mesa.getNombre());
+	    }
+	    // Y escribimos ese POJO
+	    mapper.writeValue(destino.toFile(), salida);
 	}
 
 	/* Classes auxiliares para mapear el JSON */
