@@ -56,7 +56,7 @@ public class ObjetoCrafteable extends Item {
 	
 	@Override
 	public String getArbolCrafteoBasicos() {	// Receta default
-		return getArbolCrafteoBasicos(1);
+		return getArbolCrafteoBasicos(0);
 	}
 	
 	@Override
@@ -120,7 +120,7 @@ public class ObjetoCrafteable extends Item {
 	/* Los ingredientes de la receta indicada */
 	@Override
 	public Map<Item, Integer> getIngredientes(int numReceta) {
-		return recetas.isEmpty() ? null : recetas.get(numReceta - 1).getIngredientes();
+		return recetas.isEmpty() ? null : recetas.get(numReceta).getIngredientes();
 	}
 
 	/* Los ingredientes de todas las recetas */
@@ -185,7 +185,7 @@ public class ObjetoCrafteable extends Item {
 	
 	@Override
 	public int getCantidadGenerada(int numReceta) {
-		return this.recetas.get(numReceta - 1).getCantidadGenerada();
+		return this.recetas.get(numReceta).getCantidadGenerada();
 	}
 	
 	@Override
@@ -195,7 +195,7 @@ public class ObjetoCrafteable extends Item {
 	
 	@Override
 	public Receta getReceta(int numReceta) {
-		return recetas.get(numReceta - 1);
+		return recetas.get(numReceta);
 	}
 	
 	@Override

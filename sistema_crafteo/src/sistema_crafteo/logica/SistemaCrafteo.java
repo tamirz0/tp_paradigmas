@@ -22,6 +22,7 @@ public class SistemaCrafteo {
 	public SistemaCrafteo() {
 		itemsRegistrados = new HashSet<>();
 		historial = new HistorialCrafteo();
+		Prolog.cargarReglas();
 	}
 
 	public boolean registrarItem(Item item) {
@@ -222,15 +223,30 @@ public class SistemaCrafteo {
 		return inventario;
 	}
 
-	public void cargarProlog() {
-		for (Item item : itemsRegistrados) {
-			Prolog.cargarItem(item);
+	public boolean puedeCraftearProlog(Inventario inventario, Item item) {
+		if (!item.esCrafteable()) {
+			return false;
 		}
-		Prolog.cargarReglas();
+
+		Prolog.cargarInventario(inventario);
+
+		for (int i = 0; i < item.getRecetas().size(); i++) {
+			Prolog.cargarObjetoCrafteable(item, i);
+			if (Prolog.puedoCraftear(item)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
-	public boolean puedeCraftearProlog(Inventario inventario, Item item) {
+	public boolean puedeCraftearProlog(Inventario inventario, Item item, int nroReceta) {
+		if (!item.esCrafteable()) {
+			return false;
+		}
+		Prolog.limpiarBaseObjetos();
 		Prolog.cargarInventario(inventario);
+		Prolog.cargarObjetoCrafteable(item, nroReceta);
 		return Prolog.puedoCraftear(item);
 	}
 
@@ -256,7 +272,7 @@ public class SistemaCrafteo {
 			// 1. Rutas a archivos JSON
 			String recetasJson = "files/recetas.json"; // Ajustar ruta si es necesario
 			String inventarioJson = "files/inventario.json"; // Ajustar ruta si es necesario
-			
+
 			// 2. Cargar items definidos en recetas
 			GestorArchivo gestor = new GestorArchivo(Paths.get(inventarioJson), Paths.get(recetasJson));
 			Map<String, Item> items = gestor.cargarItems();
@@ -277,9 +293,9 @@ public class SistemaCrafteo {
 			// MesaDeTrabajo mesaEscudo =
 			// items.get("escudo").getReceta().getMesaRequerida();
 			// inventario.agregarMesa(mesaEscudo);
-			
+
 			System.out.println(inventario.tieneMesa(new MesaDeTrabajo("mesa_carbonizo")));
-			
+
 			String nombreObjetivo = "escudo"; // Cambiar por el item a craftear
 			Item objetivo = items.get(nombreObjetivo);
 			if (objetivo == null) {
@@ -317,20 +333,16 @@ public class SistemaCrafteo {
 			} else {
 				System.out.println("No se pudo craftear: " + nombreObjetivo);
 			}
-/*
-			nombreObjetivo = "piedra premium";
-			objetivo = items.get("piedra premium");
-
-			System.out.println(
-					"Faltantes nivel1 para piedra: " + sistema.getFaltantesNivel1Minimos(objetivo, inventario));
-
-			exito = sistema.craftearConReceta(inventario, objetivo, 1);
-			if (exito) {
-				System.out.println("Crafteado exitosamente: " + nombreObjetivo);
-			} else {
-				System.out.println("No se pudo craftear: " + nombreObjetivo);
-			}
-*/
+			/*
+			 * nombreObjetivo = "piedra premium"; objetivo = items.get("piedra premium");
+			 * 
+			 * System.out.println( "Faltantes nivel1 para piedra: " +
+			 * sistema.getFaltantesNivel1Minimos(objetivo, inventario));
+			 * 
+			 * exito = sistema.craftearConReceta(inventario, objetivo, 1); if (exito) {
+			 * System.out.println("Crafteado exitosamente: " + nombreObjetivo); } else {
+			 * System.out.println("No se pudo craftear: " + nombreObjetivo); }
+			 */
 			// 6. Mostrar estado final
 			System.out.println("Inventario final: " + inventario.getItems());
 			HistorialCrafteo historial = sistema.getHistorial();
@@ -348,20 +360,15 @@ public class SistemaCrafteo {
 	public boolean puedeCraftearConReceta(Inventario inv, Item item, int numRecetaNivel1) {
 		if (!item.esCrafteable())
 			return false;
-		
-		// Se duplica inventario
-		Map<Item, Integer> copiaInv = new HashMap<Item, Integer>();
-		copiaInv.putAll(inv.getItems());
-		
+
 		Receta rec = item.getReceta(numRecetaNivel1);
-		if(!inv.tieneMesa(rec.getMesaRequerida())) {
+		if (rec.getMesaRequerida() != null && !inv.tieneMesa(rec.getMesaRequerida())) {
 			return false;
 		}
-		
-		// Inicia recursion
-		return consumirRecursivo(item.getReceta(numRecetaNivel1), copiaInv, inv);
+
+		return puedeCraftearProlog(inv, item, numRecetaNivel1);
 	}
-	
+
 	private Receta elegirSubRecetaViable(Item item, int qty, Map<Item, Integer> simInv, Inventario invReal) {
 		for (Receta cand : item.getRecetas()) {
 			int upLote = cand.getCantidadGenerada();
@@ -381,13 +388,13 @@ public class SistemaCrafteo {
 		return null;
 
 	}
-	
+
 	private boolean consumirRecursivo(Receta rec, Map<Item, Integer> simInv, Inventario invReal) {
 		// Por cada receta que tenga el item/ingrediente
-		
-		if(rec.getMesaRequerida() != null && !invReal.tieneMesa(rec.getMesaRequerida()))
+
+		if (rec.getMesaRequerida() != null && !invReal.tieneMesa(rec.getMesaRequerida()))
 			return false;
-		
+
 		for (var entry : rec.getIngredientes().entrySet()) {
 			Item ing = entry.getKey();
 			int cant = entry.getValue();
@@ -397,32 +404,34 @@ public class SistemaCrafteo {
 				simInv.put(ing, disponible - cant);
 				continue;
 			}
-			
+
 			if (!ing.esCrafteable())
 				return false;
-			
+
 			int faltante = cant - disponible;
-			
+
 			Receta subRec = elegirSubRecetaViable(ing, faltante, simInv, invReal);
-			
+
 			if (subRec == null) {
 				return false;
 			}
-			
-			// Si llegamos aca, se puede realizar el crafteo. Actualizamos el inventario real (el recibido por parametro)
+
+			// Si llegamos aca, se puede realizar el crafteo. Actualizamos el inventario
+			// real (el recibido por parametro)
 			int unidadesPorLote = subRec.getCantidadGenerada();
 			int lotes = (faltante + unidadesPorLote - 1) / unidadesPorLote;
 			for (int i = 0; i < lotes; i++) {
 				if (!consumirRecursivo(subRec, simInv, invReal)) {
 					return false; // debería no ocurrir, pero por seguridad
 				}
-				
-				simInv.put(ing, simInv.getOrDefault(ing,0) + unidadesPorLote);
+
+				simInv.put(ing, simInv.getOrDefault(ing, 0) + unidadesPorLote);
 			}
-		
-			simInv.put(ing, simInv.getOrDefault(ing,0) - cant);
+
+			simInv.put(ing, simInv.getOrDefault(ing, 0) - cant);
 		}
-		// Si se llego hasta aca, se recorrieron todos los ingredientes y se puede craftear el objeto
+		// Si se llego hasta aca, se recorrieron todos los ingredientes y se puede
+		// craftear el objeto
 		return true;
 
 	}
@@ -548,23 +557,27 @@ public class SistemaCrafteo {
 		// 1) buscamos índice 1-based de la primera receta viable
 		int nRec = item.getRecetas().size();
 		for (int idx1 = 0; idx1 < nRec; idx1++) {
-			if (puedeCraftearConReceta(inv, item, idx1)) {
-				// 2) crafteamos con esa receta
-				return craftear(inv, item, idx1);
+			if (craftear(inv, item, idx1)) {
+				return true;
 			}
 		}
 		return false;
 	}
 
 	public boolean craftear(Inventario inv, Item item, int recetaIndex1) {
-		// Validaciones básicas
 		if (!item.esCrafteable())
 			return false;
+
 		int nRec = item.getRecetas().size();
+		// Validaciones básicas
 		if (recetaIndex1 < 0 || recetaIndex1 > nRec) {
 			throw new IllegalArgumentException("Índice de receta inválido");
 		}
-		
+
+		if (!puedeCraftearConReceta(inv, item, recetaIndex1)) {
+			return false;
+		}
+
 		Receta receta = item.getRecetas().get(recetaIndex1);
 		// 1) simulamos primero para asegurarnos de que cabe
 		Map<Item, Integer> objetos = cloneMap(inv.getItems());
