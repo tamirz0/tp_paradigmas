@@ -222,7 +222,7 @@ public class SistemaCrafteo {
 			int upLote = cand.getCantidadGenerada();
 			int lotes = (qty + upLote - 1) / upLote;
 
-			Map<Item, Integer> copia = cloneMap(simInv);
+			Map<Item, Integer> copia = new HashMap<>(simInv);;
 			boolean ok = true;
 			for (int i = 0; i < lotes; i++) {
 				if (!consumirRecursivo(cand, copia, invReal)) {
@@ -313,10 +313,6 @@ public class SistemaCrafteo {
 		return getIngredientesBasicosFaltantesTodos(item, inv).get(recetaIndex);
 	}
 
-	private Map<Item, Integer> cloneMap(Map<Item, Integer> orig) {
-		return new HashMap<>(orig);
-	}
-
 	/**
 	 * Recorre todas las recetas de 'item' y devuelve el mapa de ingredientes de
 	 * primer nivel faltantes mínimo entre ellas.
@@ -372,7 +368,7 @@ public class SistemaCrafteo {
 		Receta receta = item.getRecetas().get(recetaIndex1);
 
 		// Clonamos inventario para simular
-		Map<Item, Integer> simInv = cloneMap(inv.getItems());
+		Map<Item, Integer> simInv = new HashMap<>(inv.getItems());
 		int lotes = 0;
 
 		// Intentamos consumir lotes hasta que no quepa
@@ -432,7 +428,7 @@ public class SistemaCrafteo {
 
 		Receta receta = item.getRecetas().get(recetaIndex1);
 		// 1) simulamos primero para asegurarnos de que cabe
-		Map<Item, Integer> objetos = cloneMap(inv.getItems());
+		Map<Item, Integer> objetos = new HashMap<>(inv.getItems());
 		if (!consumirRecursivo(receta, objetos, inv)) {
 			return false;
 		}
