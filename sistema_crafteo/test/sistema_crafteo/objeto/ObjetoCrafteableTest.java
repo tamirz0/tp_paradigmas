@@ -108,7 +108,6 @@ class ObjetoCrafteableTest {
         @Test
         void getArbolCrafteoBasicos_primerNivel() {
             String ar = o.getArbolCrafteoBasicos(0);
-            System.out.println(o.getArbolCrafteoBasicos(0));
             // solo nivel 1 de r1: "2 A"
             assertTrue(ar.contains("|- 1 X"));
             assertTrue(ar.contains("|  |- 2 A"));

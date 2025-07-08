@@ -12,7 +12,6 @@ import sistema_crafteo.integracion.GestorArchivo;
 import sistema_crafteo.integracion.Prolog;
 import sistema_crafteo.inventario.Inventario;
 import sistema_crafteo.objeto.Item;
-import sistema_crafteo.objeto.MesaDeTrabajo;
 import sistema_crafteo.objeto.Receta;
 
 public class SistemaCrafteo {
@@ -125,94 +124,6 @@ public class SistemaCrafteo {
 			}
 		}
 		return null;
-	}
-
-	public static void mostrarFuncionamiento() {
-		try {
-			// 1. Rutas a archivos JSON
-			String recetasJson = "files/recetas.json"; // Ajustar ruta si es necesario
-			String inventarioJson = "files/inventario.json"; // Ajustar ruta si es necesario
-
-			// 2. Cargar items definidos en recetas
-			GestorArchivo gestor = new GestorArchivo(Paths.get(inventarioJson), Paths.get(recetasJson));
-			Map<String, Item> items = gestor.cargarItems();
-			System.out.println("Items cargados: " + items.keySet());
-
-			// 3. Crear e inicializar inventario
-			Inventario inventario = gestor.cargarInventario(items);
-			System.out.println("Inventario inicial: " + inventario.getItems());
-
-			// 4. Registrar items en el sistema
-			SistemaCrafteo sistema = new SistemaCrafteo();
-			for (Item item : items.values()) {
-				sistema.registrarItem(item);
-			}
-
-			// 5. Ejemplo de crafteo
-			// Primero hago la mesa si no la tengo (en este caso ya la tengo)
-			// MesaDeTrabajo mesaEscudo =
-			// items.get("escudo").getReceta().getMesaRequerida();
-			// inventario.agregarMesa(mesaEscudo);
-
-			System.out.println(inventario.tieneMesa(new MesaDeTrabajo("mesa_carbonizo")));
-
-			String nombreObjetivo = "escudo"; // Cambiar por el item a craftear
-			Item objetivo = items.get(nombreObjetivo);
-			if (objetivo == null) {
-				System.err.println("Item no encontrado: " + nombreObjetivo);
-				return;
-			}
-
-			System.out
-					.println("Ingredientes (default) " + nombreObjetivo + " " + objetivo.getIngredientes().toString());
-			System.out.println(
-					"Ingredientes (receta 3) " + nombreObjetivo + " " + objetivo.getIngredientes(2).toString() + "\n");
-
-			if (sistema.puedeCraftearProlog(inventario, objetivo))
-				System.out.println("Se puede craftear escudo.");
-			else
-				System.out.println("No se puede craftear escudo.");
-
-			System.out.println("Basicos faltantes escudo: " + sistema.getBasicosFaltantesMinimos(objetivo, inventario));
-
-			System.out.println("Ingredientes nivel1 faltantes escudo (receta 3): "
-					+ sistema.getFaltantesNivel1(objetivo, 2, inventario));
-			System.out.println("Ingredientes nivel1 faltantes escudo (para todos): "
-					+ sistema.getBasicosFaltantesMinimos(objetivo, inventario));
-
-			// System.out.println(objetivo.getArbolCrafteoBasicos(3) + "\n");
-			// System.out.println(objetivo.getArbolCrafteo(3));
-
-			System.out.println("Cantidad maxima de escudo (receta 3): "
-					+ sistema.getCantidadMaximaParaReceta(inventario, objetivo, 2));
-			System.out.println("Cantidad maxima de escudo: " + sistema.getCantidadMaxima(inventario, objetivo));
-
-			boolean exito = sistema.craftear(inventario, objetivo, 2);
-			if (exito) {
-				System.out.println("Crafteado exitosamente: " + nombreObjetivo);
-			} else {
-				System.out.println("No se pudo craftear: " + nombreObjetivo);
-			}
-			/*
-			 * nombreObjetivo = "piedra premium"; objetivo = items.get("piedra premium");
-			 * 
-			 * System.out.println( "Faltantes nivel1 para piedra: " +
-			 * sistema.getFaltantesNivel1Minimos(objetivo, inventario));
-			 * 
-			 * exito = sistema.craftearConReceta(inventario, objetivo, 1); if (exito) {
-			 * System.out.println("Crafteado exitosamente: " + nombreObjetivo); } else {
-			 * System.out.println("No se pudo craftear: " + nombreObjetivo); }
-			 */
-			// 6. Mostrar estado final
-			System.out.println("Inventario final: " + inventario.getItems());
-			HistorialCrafteo historial = sistema.getHistorial();
-			System.out.println("\nHistorial de crafteos: \n" + historial.getRegistros());
-
-			gestor.guardarInventario(Paths.get("files/inventario-out.json"), inventario);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	/////////////////////////////////////////////////////
