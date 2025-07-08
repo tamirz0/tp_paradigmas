@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -92,12 +91,10 @@ class ObjetoCrafteableTest {
         }
         
         @Test
-        @Disabled
+        //@Disabled
         void cantidadCrafteos_calculaCorrecto() {
             // r1 genera 1 → para 5 unidades necesita 5 crafteos
             assertEquals(5, o.cantidadCrafteos(5));
-            // r2 genera 2 → para 5 unidades necesita ceil(5/2)=3
-            assertEquals(3, o.cantidadCrafteos(5));
         }
         
         @Test
@@ -109,11 +106,11 @@ class ObjetoCrafteableTest {
         }
 
         @Test
-        @Disabled
         void getArbolCrafteoBasicos_primerNivel() {
             String ar = o.getArbolCrafteoBasicos(0);
+            System.out.println(o.getArbolCrafteoBasicos(0));
             // solo nivel 1 de r1: "2 A"
-            assertTrue(ar.contains("|- X"));
+            assertTrue(ar.contains("|- 1 X"));
             assertTrue(ar.contains("|  |- 2 A"));
         }
         
