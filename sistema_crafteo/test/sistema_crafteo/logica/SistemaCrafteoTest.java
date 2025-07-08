@@ -41,9 +41,9 @@ class SistemaCrafteoTest {
 			Item palo = ingredientesEspada.get(0);
 			Item metal = ingredientesEspada.get(1);
 			Item piedra = ingredientesEspada.get(2);
-			itemsMiInventario.put(palo, 9); // Palo
-			itemsMiInventario.put(metal, 5); // Metal
-			itemsMiInventario.put(piedra, 2); // Piedra
+			itemsMiInventario.put(palo, 9); 
+			itemsMiInventario.put(metal, 5); 
+			itemsMiInventario.put(piedra, 2); 
 
 			sistema.registrarItem(espada);
 			sistema.registrarItem(new IngredienteBasico("Prueba", " "));
@@ -52,10 +52,10 @@ class SistemaCrafteoTest {
 			miInventario.setItems(itemsMiInventario);
 
 			int esperado = 3;
-			int actual = sistema.getIngredientesFaltantes(espada, miInventario).getOrDefault(piedra, 0);
+			int actual = sistema.getFaltantesNivel1Minimos(espada, miInventario).getOrDefault(piedra, 0);
 			assertEquals(esperado, actual);
-			assertNull(sistema.getIngredientesFaltantes(espada, miInventario).get(palo));
-			assertNull(sistema.getIngredientesFaltantes(espada, miInventario).get(metal));
+			assertNull(sistema.getFaltantesNivel1Minimos(espada, miInventario).get(palo));
+			assertNull(sistema.getFaltantesNivel1Minimos(espada, miInventario).get(metal));
 		}
 
 		@Test
@@ -72,14 +72,14 @@ class SistemaCrafteoTest {
 
 			miInventario.setItems(itemsMiInventario);
 
-			boolean actual = sistema.getIngredientesFaltantes(espada, miInventario).isEmpty();
+			boolean actual = sistema.getFaltantesNivel1Minimos(espada, miInventario).isEmpty();
 			assertTrue(actual);
 		}
 
 		@Test
 		void getIngredientesFaltantes_itemNoCrafteable_retornaNull() {
 			IngredienteBasico a = new IngredienteBasico("prueba", "");
-			assertNull(sistema.getIngredientesFaltantes(a, miInventario));
+			assertNull(sistema.getFaltantesNivel1Minimos(a, miInventario));
 		}
 
 		@Test
@@ -96,7 +96,7 @@ class SistemaCrafteoTest {
 
 			miInventario.setItems(itemsMiInventario);
 
-			Map<Item, Integer> actual = sistema.getIngredientesBasicosFaltantes(espada, miInventario);
+			Map<Item, Integer> actual = sistema.getBasicosFaltantesMinimos(espada, miInventario);
 			assertFalse(actual.containsKey(metal));
 			assertEquals(4, actual.get(roca));
 			assertEquals(3, actual.get(madera));
@@ -116,7 +116,7 @@ class SistemaCrafteoTest {
 
 			miInventario.setItems(itemsMiInventario);
 
-			Map<Item, Integer> actual = sistema.getIngredientesBasicosFaltantes(espada, miInventario);
+			Map<Item, Integer> actual = sistema.getBasicosFaltantesMinimos(espada, miInventario);
 			assertTrue(actual.isEmpty());
 		}
 
@@ -141,7 +141,7 @@ class SistemaCrafteoTest {
 
 			miInventario.setItems(itemsMiInventario);
 
-			Map<Item, Integer> actual = sistema.getIngredientesBasicosFaltantes(espada, miInventario);
+			Map<Item, Integer> actual = sistema.getBasicosFaltantesMinimos(espada, miInventario);
 
 			assertEquals(3, actual.get(metal));
 			assertEquals(1, actual.get(madera));
@@ -180,7 +180,7 @@ class SistemaCrafteoTest {
 
 			recetaEspada = new Receta(ingredientes, null, 1);
 
-			ObjetoCrafteable espada2 = new ObjetoCrafteable("Espada", " ", 10, recetaEspada, recetaPiedra);
+			ObjetoCrafteable espada2 = new ObjetoCrafteable("Espada", " ", 10, recetaEspada);
 			Map<Item, Integer> itemsMiInventario = new HashMap<Item, Integer>();
 
 			itemsMiInventario.put(madera, 10);
@@ -192,7 +192,7 @@ class SistemaCrafteoTest {
 
 			miInventario.setItems(itemsMiInventario);
 
-			int actual = sistema.getCantidadMaximaCrafteable(miInventario, espada2);
+			int actual = sistema.getCantidadMaxima(miInventario, espada2);
 			assertEquals(3, actual);
 		}
 		
@@ -217,7 +217,7 @@ class SistemaCrafteoTest {
 
 			miInventario.setItems(itemsMiInventario);
 
-			int actual = sistema.getCantidadMaximaCrafteable(miInventario, espada);
+			int actual = sistema.getCantidadMaxima(miInventario, espada);
 			assertEquals(2, actual);
 		}
 		
@@ -309,7 +309,7 @@ class SistemaCrafteoTest {
 
 			recetaEspada = new Receta(ingredientes, null, 1);
 
-			ObjetoCrafteable espada = new ObjetoCrafteable("Espada", " ", 10, recetaEspada, recetaPiedra);
+			ObjetoCrafteable espada = new ObjetoCrafteable("Espada", " ", 10, recetaEspada);
 			return espada;
 		}
 

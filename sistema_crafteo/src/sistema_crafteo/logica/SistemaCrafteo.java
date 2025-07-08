@@ -32,21 +32,6 @@ public class SistemaCrafteo {
 		return itemsRegistrados.add(item);
 	}
 
-	public Map<Item, Integer> getIngredientesFaltantes(Item item, Inventario inventario) {
-		if (!item.esCrafteable()) {
-			return null;
-		}
-
-		Map<Item, Integer> ingredientesItem = item.getIngredientes();
-		Map<Item, Integer> ingredientesInventario = inventario.getItems();
-
-		Map<Item, Integer> faltantes = OperacionesMap.restarTodo(ingredientesItem, ingredientesInventario);
-
-		faltantes = OperacionesMap.quitarKeysConValorCero(faltantes);
-
-		return faltantes;
-	}
-
 	public List<Map<Item, Integer>> getIngredientesFaltantesTodos(Item item, Inventario inventario) {
 		if (!item.esCrafteable()) {
 			return null;
@@ -61,28 +46,6 @@ public class SistemaCrafteo {
 		}
 
 		return ret;
-	}
-
-	public Map<Item, Integer> getIngredientesBasicosFaltantes(Item item, Inventario inventario) {
-		if (!item.esCrafteable()) {
-			return null;
-		}
-
-		Map<Item, Integer> itemsFaltantes = getIngredientesFaltantes(item, inventario);
-		if (itemsFaltantes.isEmpty()) {
-			return itemsFaltantes;
-		}
-		Receta recetaFaltantes = new Receta(itemsFaltantes, null);
-
-		Map<Item, Integer> basicosFaltantesItem = recetaFaltantes.getRecetasBasicas(1);
-		Map<Item, Integer> ingredientesInventario = inventario.getItems();
-
-		ingredientesInventario = OperacionesMap.restarTodo(ingredientesInventario, item.getIngredientes());
-		Map<Item, Integer> faltantes = OperacionesMap.restarTodo(basicosFaltantesItem, ingredientesInventario);
-
-		faltantes = OperacionesMap.quitarKeysConValorCero(faltantes);
-
-		return faltantes;
 	}
 
 	public List<Map<Item, Integer>> getIngredientesBasicosFaltantesTodos(Item item, Inventario inventario) {
@@ -113,101 +76,6 @@ public class SistemaCrafteo {
 		return ret;
 	}
 
-	public boolean puedeCraftear(Inventario inventario, Item item) {
-		Map<Item, Integer> resultado = getIngredientesFaltantes(item, inventario);
-		if (resultado == null) {
-			return false;
-		}
-
-		if (!inventario.tieneMesa(item.getReceta().getMesaRequerida())) {
-			return false;
-		}
-
-		return resultado.isEmpty();
-	}
-
-	public boolean puedeCraftearBasicos(Inventario inventario, Item item) {
-		Map<Item, Integer> resultado = getIngredientesBasicosFaltantes(item, inventario);
-		if (resultado == null) {
-			return false;
-		}
-
-		Set<MesaDeTrabajo> mesasRequeridas = item.getReceta().getMesas();
-
-		for (MesaDeTrabajo mesa : mesasRequeridas) {
-			if (!inventario.tieneMesa(mesa)) {
-				return false;
-			}
-		}
-
-		return resultado.isEmpty();
-	}
-
-	public int getCantidadMaximaCrafteable(Inventario inventario, Item item) {
-		if (!item.esCrafteable()) {
-			return 0;
-		}
-
-		int cantidad = 0;
-		Inventario modificable = new Inventario();
-		Map<Item, Integer> copiaItemsInventario = new HashMap<Item, Integer>();
-		copiaItemsInventario.putAll(inventario.getItems());
-		modificable.setItems(copiaItemsInventario);
-
-		while (ejecutarCrafteo(modificable, item)) {
-			cantidad++;
-		}
-
-		return cantidad;
-	}
-
-	/*
-	 * public boolean craftear(Inventario inventario, Item item) { if
-	 * (!ejecutarCrafteo(inventario, item)) { return false; }
-	 * 
-	 * historial.registrarCrafteo(item, item.getIngredientes()); return true; }
-	 */
-	private boolean ejecutarCrafteo(Inventario inventario, Item item) {
-		if (!item.esCrafteable()) {
-			return false;
-		}
-
-		if (!puedeCraftearBasicos(inventario, item)) {
-			return false;
-		}
-
-		Map<Item, Integer> objetos = inventario.getItems();
-
-		if (!puedeCraftear(inventario, item)) {
-			Map<Item, Integer> faltantes = getIngredientesFaltantes(item, inventario);
-			Map<Item, Integer> faltantesABasicos = obtenerBasicos(faltantes);
-
-			for (Map.Entry<Item, Integer> entrada : faltantes.entrySet()) {
-				Item ingrediente = entrada.getKey();
-				Integer cantidadFaltante = entrada.getValue();
-				OperacionesMap.sumarValor(objetos, ingrediente,
-						ingrediente.getCantidadGenerada() * ingrediente.cantidadCrafteos(cantidadFaltante));
-			}
-
-			objetos = OperacionesMap.restarTodo(objetos, faltantesABasicos);
-		}
-
-		objetos = OperacionesMap.restarTodo(objetos, item.getIngredientes());
-		OperacionesMap.sumarValor(objetos, item, item.getCantidadGenerada());
-		objetos = OperacionesMap.quitarKeysConValorCero(objetos);
-		inventario.setItems(objetos);
-
-		return true;
-	}
-
-	private Map<Item, Integer> obtenerBasicos(Map<Item, Integer> ing) {
-		if (ing == null || ing.isEmpty()) {
-			return new HashMap<Item, Integer>();
-		}
-		Receta aux = new Receta(ing, null);
-		return aux.getRecetasBasicas(1);
-	}
-
 	public Inventario cargarDatos(String pathRecetas, String pathInventario) {
 		GestorArchivo gestor = new GestorArchivo(Paths.get(pathInventario), Paths.get(pathRecetas));
 		Inventario inventario = null;
@@ -224,8 +92,8 @@ public class SistemaCrafteo {
 	}
 
 	/**
-	 * Verifica si se puede craftear un item usando la lógica de Prolog.
-	 * Las reglas se cargan en el constructor, solo se recarga el inventario.
+	 * Verifica si se puede craftear un item usando la lógica de Prolog. Las reglas
+	 * se cargan en el constructor, solo se recarga el inventario.
 	 */
 	public boolean puedeCraftearProlog(Inventario inventario, Item item) {
 		if (!item.esCrafteable()) {
@@ -234,15 +102,13 @@ public class SistemaCrafteo {
 
 		Prolog.limpiarBaseObjetos();
 		Prolog.cargarInventario(inventario);
-		
+
 		for (Item itemRegistrado : itemsRegistrados) {
 			Prolog.cargarItem(itemRegistrado);
 		}
-		
+
 		return Prolog.puedoCraftear(item);
 	}
-
-
 
 	public Set<Item> getItemsRegistrados() {
 		return itemsRegistrados;
@@ -307,12 +173,12 @@ public class SistemaCrafteo {
 			else
 				System.out.println("No se puede craftear escudo.");
 
-			System.out.println("Basicos faltantes escudo: " + sistema.getBasicosFaltantesMinimos(inventario, objetivo));
+			System.out.println("Basicos faltantes escudo: " + sistema.getBasicosFaltantesMinimos(objetivo, inventario));
 
 			System.out.println("Ingredientes nivel1 faltantes escudo (receta 3): "
 					+ sistema.getFaltantesNivel1(objetivo, 2, inventario));
 			System.out.println("Ingredientes nivel1 faltantes escudo (para todos): "
-					+ sistema.getBasicosFaltantesMinimos(inventario, objetivo));
+					+ sistema.getBasicosFaltantesMinimos(objetivo, inventario));
 
 			// System.out.println(objetivo.getArbolCrafteoBasicos(3) + "\n");
 			// System.out.println(objetivo.getArbolCrafteo(3));
@@ -418,7 +284,7 @@ public class SistemaCrafteo {
 
 	}
 
-	public Map<Item, Integer> getBasicosFaltantesMinimos(Inventario inv, Item item) {
+	public Map<Item, Integer> getBasicosFaltantesMinimos(Item item, Inventario inv) {
 		Map<Item, Integer> mejor = new HashMap<>();
 		int minTotal = Integer.MAX_VALUE;
 
@@ -456,6 +322,9 @@ public class SistemaCrafteo {
 	 * primer nivel faltantes mínimo entre ellas.
 	 */
 	public Map<Item, Integer> getFaltantesNivel1Minimos(Item item, Inventario inv) {
+		if(!item.esCrafteable())
+			return null;
+		
 		Map<Item, Integer> mejor = new HashMap<>();
 		int minTotal = Integer.MAX_VALUE;
 		List<Map<Item, Integer>> faltantesNivel1 = getIngredientesFaltantesTodos(item, inv);
@@ -494,9 +363,10 @@ public class SistemaCrafteo {
 		if (!item.esCrafteable()) {
 			return 0;
 		}
-		// Validar índice 1-based
+		
+		
 		int n = item.getRecetas().size();
-		if (recetaIndex1 < 0 || recetaIndex1 > n) {
+		if (recetaIndex1 < 0 || recetaIndex1 >= n) {
 			throw new IllegalArgumentException("Índice de receta inválido");
 		}
 		Receta receta = item.getRecetas().get(recetaIndex1);
@@ -552,7 +422,7 @@ public class SistemaCrafteo {
 
 		int nRec = item.getRecetas().size();
 		// Validaciones básicas
-		if (recetaIndex1 < 0 || recetaIndex1 > nRec) {
+		if (recetaIndex1 < 0 || recetaIndex1 >= nRec) {
 			throw new IllegalArgumentException("Índice de receta inválido");
 		}
 

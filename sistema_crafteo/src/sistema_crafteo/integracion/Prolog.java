@@ -53,7 +53,7 @@ public class Prolog {
 	    String nombre = item.getNombre().trim().toLowerCase().replace(" ", "_");
 
 	    // Agregar crafteable(nombre, cantidad) - siempre agregar, no verificar existencia
-	    String hecho = String.format("assertz(crafteable(%s, %d)).", nombre, item.getCantidadGenerada());
+	    String hecho = String.format("assertz(crafteable(%s, %d)).", nombre, item.getCantidadGenerada(0));
 	    Query query = new Query(hecho);
 
 	    // Cargar ingredientes (se verifica existencia dentro de cargarItem)

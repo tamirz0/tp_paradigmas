@@ -36,11 +36,6 @@ public class ObjetoCrafteable extends Item {
 	}
 	
 	@Override
-    public String getArbolCrafteo() {
-        return getArbolCrafteo(0);
-    }
-	
-	@Override
     public String getArbolCrafteo(int numReceta) {
         StringBuilder sb = new StringBuilder();
         sb.append("|- " + getCantidadGenerada(numReceta) + " ")
@@ -53,11 +48,6 @@ public class ObjetoCrafteable extends Item {
         }
         return sb.toString();
     }
-	
-	@Override
-	public String getArbolCrafteoBasicos() {	// Receta default
-		return getArbolCrafteoBasicos(0);
-	}
 	
 	@Override
 	public String getArbolCrafteoBasicos(int numReceta) {
@@ -114,7 +104,7 @@ public class ObjetoCrafteable extends Item {
 	/* Los ingredientes de la receta default */
 	@Override
 	public Map<Item, Integer> getIngredientes() {
-		return recetas.isEmpty() ? null : recetas.get(0).getIngredientes();
+		return getIngredientes(0);
 	}
 	
 	/* Los ingredientes de la receta indicada */
@@ -145,15 +135,6 @@ public class ObjetoCrafteable extends Item {
 		return recetas.isEmpty() ? null : recetas.get(0).getRecetasBasicas(crafteos);
 	}
 
-	@Override
-	public List<Map<Item, Integer>> getIngredientesBasicosTodos() {
-		List<Map<Item, Integer>> ingredientesPorReceta = new LinkedList<>();
-		for (Receta receta : recetas) {
-			ingredientesPorReceta.add(receta.getRecetasBasicas(1));
-		}
-		return ingredientesPorReceta;
-	}
-	
 	/* Cantidad de crafteos necesarios para X unidades */
 	@Override
 	public int cantidadCrafteos(int cantidadPedida) {
@@ -178,10 +159,7 @@ public class ObjetoCrafteable extends Item {
 		return crafteos;
 	}
 
-	@Override
-	public int getCantidadGenerada() {
-		return this.recetas.get(0).getCantidadGenerada();
-	}
+
 	
 	@Override
 	public int getCantidadGenerada(int numReceta) {
@@ -190,7 +168,7 @@ public class ObjetoCrafteable extends Item {
 	
 	@Override
 	public Receta getReceta() {
-		return recetas.get(0);
+		return getReceta(0);
 	}
 	
 	@Override

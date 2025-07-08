@@ -1,6 +1,8 @@
 package sistema_crafteo.objeto;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,7 +58,7 @@ class ItemTest {
 	@Test
 	void getArbolCrafteo_default_retornaNombre() {
 		String esperado = item.getNombre();
-		String actual = item.getArbolCrafteoBasicos();
+		String actual = item.getArbolCrafteoBasicos(0);
 		assertEquals(esperado, actual);
 	}
 	

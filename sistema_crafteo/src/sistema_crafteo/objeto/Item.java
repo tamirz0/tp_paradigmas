@@ -1,7 +1,6 @@
 package sistema_crafteo.objeto;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -26,15 +25,8 @@ public abstract class Item {
 		return false; 		// Por defecto NO es crafteable
 	}
 	
-	public String getArbolCrafteo() {
-		return this.nombre; // Por defecto se retorna a si mismo unicamente
-	}
 	
 	public String getArbolCrafteo(int numReceta) {
-		return this.nombre; // Por defecto se retorna a si mismo unicamente
-	}
-	
-	public String getArbolCrafteoBasicos() {
 		return this.nombre; // Por defecto se retorna a si mismo unicamente
 	}
 	
@@ -72,12 +64,6 @@ public abstract class Item {
 		Map<Item, Integer> ingrediente = new HashMap<>();
 		ingrediente.put(this, cantidadPedida);
 		return ingrediente;
-	}
-	
-	public List<Map<Item, Integer>> getIngredientesBasicosTodos(){
-		List<Map<Item, Integer>> lista = new LinkedList<>();
-		lista.add(getIngredientesBasicos());
-		return lista;
 	}
 	
 	public int cantidadCrafteos(int cantidadPedida) {

@@ -1,5 +1,6 @@
 package sistema_crafteo.objeto;
 
+import static org.junit.Assert.assertSame;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -45,12 +47,76 @@ class ObjetoCrafteableTest {
 			assertTrue(objeto.esCrafteable());
 		}
 		
+		@Test
+		void toString_objeto_muestraNombreCorrecto() {
+			assertEquals("Crafteable Objeto", objeto.toString());
+		}
+		
 	}
 	
 	
 	@Nested
 	class InteraccionObjeto{
-		
+        IngredienteBasico a, b;
+        Receta r1, r2;
+        ObjetoCrafteable o;
+
+        @BeforeEach
+        void setUp() {
+            a = new IngredienteBasico("A","");  
+            b = new IngredienteBasico("B","");
+            // receta 0: 2 A genera 1
+            Map<Item,Integer> m1 = Map.of(a,2);
+            r1 = new Receta(new HashMap<>(m1), null, 1);
+            // receta 1: 3 B genera 2
+            Map<Item,Integer> m2 = Map.of(b,3);
+            r2 = new Receta(new HashMap<>(m2), null, 2);
+            o = new ObjetoCrafteable("X","",5, r1, r2);
+        }
+        
+        @Test
+        void getRecetas_retornLas2() {
+            List<Receta> listas = o.getRecetas();
+            assertEquals(2, listas.size());
+            assertSame(r1, listas.get(0));
+            assertSame(r2, listas.get(1));
+        }
+        
+        @Test
+        void getIngredientesTodos_contieneAmbas() {
+        	Map<Item,Integer> m1 = Map.of(a,2);
+        	Map<Item,Integer> m2 = Map.of(b,3);
+            List<Map<Item,Integer>> todos = o.getIngredientesTodos();
+            assertTrue(todos.contains(m1));
+            assertTrue(todos.contains(m2));
+        }
+        
+        @Test
+        @Disabled
+        void cantidadCrafteos_calculaCorrecto() {
+            // r1 genera 1 → para 5 unidades necesita 5 crafteos
+            assertEquals(5, o.cantidadCrafteos(5));
+            // r2 genera 2 → para 5 unidades necesita ceil(5/2)=3
+            assertEquals(3, o.cantidadCrafteos(5));
+        }
+        
+        @Test
+        void getArbolCrafteo_muestraCorrecto() {
+            String ar = o.getArbolCrafteo(1);
+            // debe contener "2 B" anidado
+            assertTrue(ar.contains("|- 2 X"));
+            assertTrue(ar.contains("|- |- 3 B"));
+        }
+
+        @Test
+        @Disabled
+        void getArbolCrafteoBasicos_primerNivel() {
+            String ar = o.getArbolCrafteoBasicos(0);
+            // solo nivel 1 de r1: "2 A"
+            assertTrue(ar.contains("|- X"));
+            assertTrue(ar.contains("|  |- 2 A"));
+        }
+        
 		@Test
 		void getIngredientes_objeto_retornoCorrecto() {
 			Map<Item, Integer> ing1 = new HashMap<>();
